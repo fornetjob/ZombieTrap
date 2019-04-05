@@ -5,7 +5,7 @@ using System;
 
 namespace Assets.Scripts.Features.Client.Networking
 {
-    public class ClientReceiveSystem : IExecuteSystem, IContextInitialize, ITearDownSystem
+    public class ClientSystem : IExecuteSystem, IContextInitialize, ITearDownSystem
     {
         #region Services
 
@@ -13,16 +13,24 @@ namespace Assets.Scripts.Features.Client.Networking
 
         #endregion
 
+        #region Factories
+
+        private ConnectionStateFactory _connectionStateFactory = null;
+
+        private MessageFactory _messageFactory = null;
+
+        #endregion
+
         #region Fields
 
-        private IConnection
-            _connection;
+        private IListener
+            _listener;
+
+        private ISender
+            _sender;
 
         private ConcurrentReceiveStack
             _messageStack = new ConcurrentReceiveStack();
-
-        private DateTime
-            _lastMessageTime;
 
         private GameEntity
             _stateEntity;
@@ -33,47 +41,49 @@ namespace Assets.Scripts.Features.Client.Networking
         private GameTimeEvent
             _connectionTimeEvent;
 
+        private MessageContract
+            _connectContract;
+
         #endregion
 
         void IContextInitialize.Initialize(Contexts context)
         {
-            _stateEntity = new ConnectionStateFactory(context).Create();
+            _connectContract = _messageFactory.CreateConnectMessage(Guid.NewGuid());
 
-            _connection = new UdpConnection(new ConnectionConfiguration
+            _tryTimeEvent = _gameTimeService.CreateTimeEvent(0.6f);
+            _connectionTimeEvent = _gameTimeService.CreateTimeEvent(1);
+
+            _stateEntity = _connectionStateFactory.Create();
+
+            _sender = new UdpSender(new SendConfiguration
             {
                 RemoteHost = "localhost",
-                RemotePort = 32100,
+                RemotePort = 32100
+            });
+
+            _listener = new UdpListener(new ListenConfiguration
+            {
                 ListeningPort = 32000,
                 ReceiveTimeout = 1000
             });
 
-            _tryTimeEvent = _gameTimeService.CreateTimeEvent(0.3f);
-            _connectionTimeEvent = _gameTimeService.CreateTimeEvent(1);
+            _listener.OnReceive += (endpoint, message)=> _messageStack.Push(message);
 
-            _connection.OnReceive += _listener_OnReceive;
-
-            _connection.Open();
-        }
-
-        private void _listener_OnReceive(MessageContract message)
-        {
-            _messageStack.Push(message);
+            _listener.Open();
+            _sender.Open();
         }
 
         public void Execute()
         {
             var connectionState = _stateEntity.connectionState.value;
 
+            bool isHasMessage = false;
+
             MessageContract message;
 
             if (_messageStack.TryPopMessage(out message))
             {
-                _lastMessageTime = DateTime.Now;
-
-                if (connectionState != ConnectionState.Active)
-                {
-                    _stateEntity.ReplaceConnectionState(ConnectionState.Active, 0);
-                }
+                isHasMessage = true;
 
                 _connectionTimeEvent.Reset();
             }
@@ -89,9 +99,13 @@ namespace Assets.Scripts.Features.Client.Networking
             {
                 case ConnectionState.Connecting:
                 case ConnectionState.Lost:
-                    if (_tryTimeEvent.Check())
+                    if (isHasMessage)
                     {
-                        _connection.Send(MessageContract.ConnectMessage);
+                        _stateEntity.ReplaceConnectionState(ConnectionState.Active, 0);
+                    }
+                    else if (_tryTimeEvent.Check())
+                    {
+                        _sender.Send(_connectContract);
 
                         _stateEntity.ReplaceConnectionState(connectionState, _stateEntity.connectionState.tryCount + 1);
                     }
@@ -101,7 +115,7 @@ namespace Assets.Scripts.Features.Client.Networking
 
         public void TearDown()
         {
-            _connection.Close();
+            _listener.Close();
 
            _stateEntity.ReplaceConnectionState(ConnectionState.Closed, 0);
         }

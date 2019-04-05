@@ -4,8 +4,5 @@
     {
         void Open();
         void Close();
-
-        void Send(MessageContract msg);
-        event MessageEventHandler OnReceive;
     }
 }

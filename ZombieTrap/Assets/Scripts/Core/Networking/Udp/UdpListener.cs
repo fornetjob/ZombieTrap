@@ -4,15 +4,12 @@ using System.Threading.Tasks;
 
 namespace Assets.Scripts.Core.Networking.Udp
 {
-    public class UdpConnection : IConnection
+    public class UdpListener : IListener
     {
         #region Fields
 
-        private readonly ConnectionConfiguration
+        private readonly ListenConfiguration
             _config;
-
-        private UdpClient
-            _sendclient;
 
         private bool
             _isOpened;
@@ -27,7 +24,7 @@ namespace Assets.Scripts.Core.Networking.Udp
 
         public event MessageEventHandler OnReceive;
 
-        public UdpConnection(ConnectionConfiguration config)
+        public UdpListener(ListenConfiguration config)
         {
             _config = config;
         }
@@ -40,9 +37,6 @@ namespace Assets.Scripts.Core.Networking.Udp
             }
 
             _isOpened = true;
-
-            _sendclient = new UdpClient();
-            _sendclient.Connect(_config.RemoteHost, _config.RemotePort);
 
             Task.Run(async () =>
             {
@@ -60,15 +54,20 @@ namespace Assets.Scripts.Core.Networking.Udp
                         {
                             var message = _fragmenter.Defragment(fragment);
 
-                            var reply = new MessageContract
+                            if (message.Type == MessageType.Message)
                             {
-                                Id = message.Id,
-                                Type = MessageType.Reply
-                            };
+                                var reply = new MessageContract
+                                {
+                                    Id = message.Id,
+                                    Type = MessageType.Reply
+                                };
 
-                            Send(reply);
+                                var data = _fragmenter.Fragment(reply)[0].Data;
 
-                            OnReceive(message);
+                                listener.Send(data, data.Length, receivedResults.RemoteEndPoint);
+                            }
+
+                            OnReceive(receivedResults.RemoteEndPoint, message);
                         }
                         else
                         {
@@ -84,16 +83,6 @@ namespace Assets.Scripts.Core.Networking.Udp
             _isOpened = false;
         }
 
-        public void Send(MessageContract msg)
-        {
-            var fragments = _fragmenter.Fragment(msg);
-
-            for (int i = 0; i < fragments.Length; i++)
-            {
-                var fragment = fragments[i];
-
-                _sendclient.Send(fragment.Data, fragment.Data.Length, _config.RemoteHost, _config.RemotePort);
-            }
-        }
+      
     }
 }

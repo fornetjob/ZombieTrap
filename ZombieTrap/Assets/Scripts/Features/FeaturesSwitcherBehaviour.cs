@@ -37,7 +37,7 @@ namespace Assets.Scripts.Features
 
         private void AddClientFeatures(Contexts context)
         {
-            _feature.Add(new ClientReceiveSystem());
+            _feature.Add(new ClientSystem());
         }
 
         private void AddServerFeatures(Contexts context)
