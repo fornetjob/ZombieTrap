@@ -30,7 +30,7 @@ public sealed class ConnectionStateEventSystem : Entitas.ReactiveSystem<GameEnti
             _listenerBuffer.Clear();
             _listenerBuffer.AddRange(e.connectionStateListener.value);
             foreach (var listener in _listenerBuffer) {
-                listener.OnConnectionState(e, component.value);
+                listener.OnConnectionState(e, component.value, component.tryCount);
             }
         }
     }

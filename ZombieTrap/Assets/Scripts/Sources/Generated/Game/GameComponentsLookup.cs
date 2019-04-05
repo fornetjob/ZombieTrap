@@ -10,14 +10,16 @@ public static class GameComponentsLookup {
 
     public const int ConnectionState = 0;
     public const int Destroy = 1;
-    public const int View = 2;
-    public const int ConnectionStateListener = 3;
+    public const int GameTime = 2;
+    public const int View = 3;
+    public const int ConnectionStateListener = 4;
 
-    public const int TotalComponents = 4;
+    public const int TotalComponents = 5;
 
     public static readonly string[] componentNames = {
         "ConnectionState",
         "Destroy",
+        "GameTime",
         "View",
         "ConnectionStateListener"
     };
@@ -25,6 +27,7 @@ public static class GameComponentsLookup {
     public static readonly System.Type[] componentTypes = {
         typeof(Assets.Scripts.Features.Client.Networking.ConnectionStateComponent),
         typeof(Assets.Scripts.Features.Core.Destroy.DestroyComponent),
+        typeof(Assets.Scripts.Features.Core.GameTime.GameTimeComponent),
         typeof(Assets.Scripts.Features.Core.Views.ViewComponent),
         typeof(ConnectionStateListenerComponent)
     };

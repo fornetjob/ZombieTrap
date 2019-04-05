@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Assets.Scripts.Features.Core.Views
 {
-    public class ViewSystem:IExecuteSystem
+    public class ViewSystem:IExecuteSystem, IContextInitialize
     {
         private IGroup<GameEntity>
             _views;
@@ -12,7 +12,7 @@ namespace Assets.Scripts.Features.Core.Views
         private Dictionary<string, ViewBase>
             _dict = new Dictionary<string, ViewBase>();
 
-        public ViewSystem(Contexts context)
+        void IContextInitialize.Initialize(Contexts context)
         {
             _views = context.game.GetGroup(GameMatcher.View);
 
@@ -41,5 +41,7 @@ namespace Assets.Scripts.Features.Core.Views
                 }
             }
         }
+
+       
     }
 }

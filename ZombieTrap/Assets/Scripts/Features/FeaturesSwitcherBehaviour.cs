@@ -3,21 +3,25 @@
 using System.Linq;
 using Assets.Scripts.Features.Client.Networking;
 using Assets.Scripts.Features.Core.Views;
+using Assets.Scripts.Features.Core.GameTime;
+using Assets.Scripts.EntitasExtensions;
 
 namespace Assets.Scripts.Features
 {
     public class FeaturesSwitcherBehaviour:MonoBehaviour
     {
-        private Feature
+        private FeaturesContainer
             _feature;
 
         private void Awake()
         {
             var context = Contexts.sharedInstance;
 
-            _feature = new Feature();
+            _feature = new FeaturesContainer(context);
 
-            _feature.Add(new ViewSystem(context));
+            _feature.Add(new GameEventSystems(context));
+            _feature.Add(new GameTimeSystem());
+            _feature.Add(new ViewSystem());
 
             var args = System.Environment.GetCommandLineArgs();
 
@@ -33,7 +37,7 @@ namespace Assets.Scripts.Features
 
         private void AddClientFeatures(Contexts context)
         {
-            _feature.Add(new ClientReceiveSystem(context));
+            _feature.Add(new ClientReceiveSystem());
         }
 
         private void AddServerFeatures(Contexts context)

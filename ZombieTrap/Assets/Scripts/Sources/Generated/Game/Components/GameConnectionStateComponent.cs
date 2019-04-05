@@ -11,17 +11,19 @@ public partial class GameEntity {
     public Assets.Scripts.Features.Client.Networking.ConnectionStateComponent connectionState { get { return (Assets.Scripts.Features.Client.Networking.ConnectionStateComponent)GetComponent(GameComponentsLookup.ConnectionState); } }
     public bool hasConnectionState { get { return HasComponent(GameComponentsLookup.ConnectionState); } }
 
-    public void AddConnectionState(Assets.Scripts.Core.Networking.ConnectionState newValue) {
+    public void AddConnectionState(Assets.Scripts.Core.Networking.ConnectionState newValue, int newTryCount) {
         var index = GameComponentsLookup.ConnectionState;
         var component = (Assets.Scripts.Features.Client.Networking.ConnectionStateComponent)CreateComponent(index, typeof(Assets.Scripts.Features.Client.Networking.ConnectionStateComponent));
         component.value = newValue;
+        component.tryCount = newTryCount;
         AddComponent(index, component);
     }
 
-    public void ReplaceConnectionState(Assets.Scripts.Core.Networking.ConnectionState newValue) {
+    public void ReplaceConnectionState(Assets.Scripts.Core.Networking.ConnectionState newValue, int newTryCount) {
         var index = GameComponentsLookup.ConnectionState;
         var component = (Assets.Scripts.Features.Client.Networking.ConnectionStateComponent)CreateComponent(index, typeof(Assets.Scripts.Features.Client.Networking.ConnectionStateComponent));
         component.value = newValue;
+        component.tryCount = newTryCount;
         ReplaceComponent(index, component);
     }
 

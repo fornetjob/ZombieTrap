@@ -11,18 +11,18 @@ public partial class GameEntity {
     public Assets.Scripts.Features.Core.Views.ViewComponent view { get { return (Assets.Scripts.Features.Core.Views.ViewComponent)GetComponent(GameComponentsLookup.View); } }
     public bool hasView { get { return HasComponent(GameComponentsLookup.View); } }
 
-    public void AddView(string newPath, GameEntity newAttachedEntity) {
+    public void AddView(string newName, GameEntity newAttachedEntity) {
         var index = GameComponentsLookup.View;
         var component = (Assets.Scripts.Features.Core.Views.ViewComponent)CreateComponent(index, typeof(Assets.Scripts.Features.Core.Views.ViewComponent));
-        component.name = newPath;
+        component.name = newName;
         component.attachedEntity = newAttachedEntity;
         AddComponent(index, component);
     }
 
-    public void ReplaceView(string newPath, GameEntity newAttachedEntity) {
+    public void ReplaceView(string newName, GameEntity newAttachedEntity) {
         var index = GameComponentsLookup.View;
         var component = (Assets.Scripts.Features.Core.Views.ViewComponent)CreateComponent(index, typeof(Assets.Scripts.Features.Core.Views.ViewComponent));
-        component.name = newPath;
+        component.name = newName;
         component.attachedEntity = newAttachedEntity;
         ReplaceComponent(index, component);
     }

@@ -16,7 +16,7 @@ namespace Assets.Scripts.Features.Client.Networking
         public GameEntity Create()
         {
             var entity = _context.game.CreateEntity();
-            entity.AddConnectionState(ConnectionState.Connecting);
+            entity.AddConnectionState(ConnectionState.Connecting, 0);
 
             entity.AddView("ConnectionView", entity);
 

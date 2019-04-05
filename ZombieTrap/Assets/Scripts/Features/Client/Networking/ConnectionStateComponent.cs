@@ -8,5 +8,6 @@ namespace Assets.Scripts.Features.Client.Networking
     public class ConnectionStateComponent:IComponent
     {
         public ConnectionState value;
+        public int tryCount;
     }
 }

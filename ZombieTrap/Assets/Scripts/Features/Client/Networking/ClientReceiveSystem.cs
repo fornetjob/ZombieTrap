@@ -5,12 +5,18 @@ using System;
 
 namespace Assets.Scripts.Features.Client.Networking
 {
-    public class ClientReceiveSystem : IExecuteSystem, IInitializeSystem, ITearDownSystem
+    public class ClientReceiveSystem : IExecuteSystem, IContextInitialize, ITearDownSystem
     {
-        private const int TimeOutMs = 1000;
+        #region Services
+
+        private GameTimeService _gameTimeService = null;
+
+        #endregion
+
+        #region Fields
 
         private IConnection
-            _listener;
+            _connection;
 
         private ConcurrentReceiveStack
             _messageStack = new ConcurrentReceiveStack();
@@ -21,14 +27,19 @@ namespace Assets.Scripts.Features.Client.Networking
         private GameEntity
             _stateEntity;
 
-        public ClientReceiveSystem(Contexts context)
+        private GameTimeEvent
+            _tryTimeEvent;
+
+        private GameTimeEvent
+            _connectionTimeEvent;
+
+        #endregion
+
+        void IContextInitialize.Initialize(Contexts context)
         {
             _stateEntity = new ConnectionStateFactory(context).Create();
-        }
 
-        public void Initialize()
-        {
-            _listener = new UdpConnection(new ConnectionConfiguration
+            _connection = new UdpConnection(new ConnectionConfiguration
             {
                 RemoteHost = "localhost",
                 RemotePort = 32100,
@@ -36,8 +47,12 @@ namespace Assets.Scripts.Features.Client.Networking
                 ReceiveTimeout = 1000
             });
 
-            _listener.Open();
-            _listener.OnReceive += _listener_OnReceive;
+            _tryTimeEvent = _gameTimeService.CreateTimeEvent(0.3f);
+            _connectionTimeEvent = _gameTimeService.CreateTimeEvent(1);
+
+            _connection.OnReceive += _listener_OnReceive;
+
+            _connection.Open();
         }
 
         private void _listener_OnReceive(MessageContract message)
@@ -57,21 +72,38 @@ namespace Assets.Scripts.Features.Client.Networking
 
                 if (connectionState != ConnectionState.Active)
                 {
-                    _stateEntity.ReplaceConnectionState(ConnectionState.Active);
+                    _stateEntity.ReplaceConnectionState(ConnectionState.Active, 0);
                 }
+
+                _connectionTimeEvent.Reset();
             }
             else if (connectionState == ConnectionState.Active
-                && (DateTime.Now - _lastMessageTime).TotalMilliseconds > TimeOutMs)
+                && _connectionTimeEvent.Check())
             {
-                _stateEntity.ReplaceConnectionState(ConnectionState.Lost);
+                _stateEntity.ReplaceConnectionState(ConnectionState.Lost, 0);
+
+                _tryTimeEvent.Reset();
+            }
+
+            switch (connectionState)
+            {
+                case ConnectionState.Connecting:
+                case ConnectionState.Lost:
+                    if (_tryTimeEvent.Check())
+                    {
+                        _connection.Send(MessageContract.ConnectMessage);
+
+                        _stateEntity.ReplaceConnectionState(connectionState, _stateEntity.connectionState.tryCount + 1);
+                    }
+                    break;
             }
         }
 
         public void TearDown()
         {
-            _listener.Close();
+            _connection.Close();
 
-           _stateEntity.ReplaceConnectionState(ConnectionState.Closed);
+           _stateEntity.ReplaceConnectionState(ConnectionState.Closed, 0);
         }
     }
 }
