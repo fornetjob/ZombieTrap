@@ -1,19 +1,18 @@
-﻿using Assets.Scripts.Core.Networking;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Net.Sockets;
 using System.Threading.Tasks;
 
-namespace Assets.Scripts.Features.Client.Networking
+namespace Assets.Scripts.Core.Networking.Udp
 {
-    public class UdpMessageListener : IMessageListener
+    public class UdpConnection : IConnection
     {
         #region Fields
 
-        private readonly ListenerConfiguration
+        private readonly ConnectionConfiguration
             _config;
 
         private UdpClient
-            _listener;
+            _sendclient;
 
         private bool
             _isOpened;
@@ -28,7 +27,7 @@ namespace Assets.Scripts.Features.Client.Networking
 
         public event MessageEventHandler OnReceive;
 
-        public UdpMessageListener(ListenerConfiguration config)
+        public UdpConnection(ConnectionConfiguration config)
         {
             _config = config;
         }
@@ -42,15 +41,18 @@ namespace Assets.Scripts.Features.Client.Networking
 
             _isOpened = true;
 
+            _sendclient = new UdpClient();
+            _sendclient.Connect(_config.RemoteHost, _config.RemotePort);
+
             Task.Run(async () =>
             {
-                using (var udpClient = new UdpClient(_config.Address, _config.Port))
+                using (var listener = new UdpClient(_config.ListeningPort))
                 {
-                    udpClient.Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReceiveTimeout, _config.ReceiveTimeout);
+                    listener.Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReceiveTimeout, _config.ReceiveTimeout);
 
                     while (_isOpened)
                     {
-                        var receivedResults = await udpClient.ReceiveAsync();
+                        var receivedResults = await listener.ReceiveAsync();
 
                         var fragment = new MessageFragment(receivedResults.Buffer);
 
@@ -64,9 +66,8 @@ namespace Assets.Scripts.Features.Client.Networking
                                 Type = MessageType.Reply
                             };
 
-                            var replyData = _fragmenter.Fragment(reply)[0].Data;
+                            Send(reply);
 
-                            udpClient.Send(replyData, replyData.Length, receivedResults.RemoteEndPoint);
                             OnReceive(message);
                         }
                         else
@@ -81,6 +82,18 @@ namespace Assets.Scripts.Features.Client.Networking
         public void Close()
         {
             _isOpened = false;
+        }
+
+        public void Send(MessageContract msg)
+        {
+            var fragments = _fragmenter.Fragment(msg);
+
+            for (int i = 0; i < fragments.Length; i++)
+            {
+                var fragment = fragments[i];
+
+                _sendclient.Send(fragment.Data, fragment.Data.Length, _config.RemoteHost, _config.RemotePort);
+            }
         }
     }
 }

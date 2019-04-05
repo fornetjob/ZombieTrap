@@ -1,5 +1,5 @@
 ﻿using Assets.Scripts.Core.Networking;
-
+using Assets.Scripts.Core.Networking.Udp;
 using Entitas;
 using System;
 
@@ -9,7 +9,7 @@ namespace Assets.Scripts.Features.Client.Networking
     {
         private const int TimeOutMs = 1000;
 
-        private IMessageListener
+        private IConnection
             _listener;
 
         private ConcurrentReceiveStack
@@ -28,10 +28,11 @@ namespace Assets.Scripts.Features.Client.Networking
 
         public void Initialize()
         {
-            _listener = new UdpMessageListener(new ListenerConfiguration
+            _listener = new UdpConnection(new ConnectionConfiguration
             {
-                Address = "127.0.0.1",
-                Port = 32123,
+                RemoteHost = "localhost",
+                RemotePort = 32100,
+                ListeningPort = 32000,
                 ReceiveTimeout = 1000
             });
 

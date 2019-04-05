@@ -5,7 +5,7 @@ namespace Assets.Scripts.Core.Networking
 {
     public class MessageFragmenter
     {
-        private const int FragmentSizeWithHeader = 1200;
+        public const int FragmentSizeWithHeader = 1200;
         private const int FragmentSize = FragmentSizeWithHeader - MessageFragment.HeaderSize;
 
         private MemoryStream
