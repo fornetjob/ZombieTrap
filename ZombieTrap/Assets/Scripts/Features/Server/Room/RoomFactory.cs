@@ -1,22 +1,22 @@
-﻿using System;
+﻿using Assets.Scripts.Features.Server.Room;
+using System;
 using UnityEngine;
 
-namespace Assets.Scripts.Features.Server.Room
+public class RoomFactory : FactoryBase
 {
-    public class RoomFactory:FactoryBase
+    public static readonly Bounds RoomBound = new Bounds(Vector3.zero, new Vector3(20, 10, 1));
+
+    public ServerSideEntity Create()
     {
-        public ServerSideEntity Create(Bounds bound)
-        {
-            var entity = _context.serverSide.CreateEntity();
-            
-            entity.AddIdentity(0);
-            entity.AddRoomIdentity(Guid.NewGuid());
-            entity.AddRoom(1000, 2, 28, 0.3f);
-            entity.AddBound(bound);
+        var entity = _context.serverSide.CreateEntity();
 
-            _context.feautures.Add(new RoomSystem(entity));
+        entity.AddIdentity(0);
+        entity.AddRoomIdentity(Guid.NewGuid());
+        entity.AddRoom(1000, 2, 28, 0.3f);
+        entity.AddBound(RoomBound);
 
-            return entity;
-        }
+        _context.feautures.Add(new RoomSystem(entity));
+
+        return entity;
     }
 }

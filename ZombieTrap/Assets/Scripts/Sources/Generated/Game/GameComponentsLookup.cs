@@ -13,17 +13,18 @@ public static class GameComponentsLookup {
     public const int Bound = 2;
     public const int Destroy = 3;
     public const int GameTime = 4;
-    public const int Identity = 5;
-    public const int Move = 6;
-    public const int Position = 7;
-    public const int Sprite = 8;
-    public const int SpriteSize = 9;
-    public const int View = 10;
-    public const int Zombie = 11;
-    public const int ConnectionStateListener = 12;
-    public const int PositionListener = 13;
+    public const int WaitTime = 5;
+    public const int Identity = 6;
+    public const int Move = 7;
+    public const int Position = 8;
+    public const int Sprite = 9;
+    public const int SpriteSize = 10;
+    public const int View = 11;
+    public const int Zombie = 12;
+    public const int ConnectionStateListener = 13;
+    public const int PositionListener = 14;
 
-    public const int TotalComponents = 14;
+    public const int TotalComponents = 15;
 
     public static readonly string[] componentNames = {
         "ConnectionState",
@@ -31,6 +32,7 @@ public static class GameComponentsLookup {
         "Bound",
         "Destroy",
         "GameTime",
+        "WaitTime",
         "Identity",
         "Move",
         "Position",
@@ -48,6 +50,7 @@ public static class GameComponentsLookup {
         typeof(Assets.Scripts.Features.Core.Bound.BoundComponent),
         typeof(Assets.Scripts.Features.Core.Destroy.DestroyComponent),
         typeof(Assets.Scripts.Features.Core.GameTime.GameTimeComponent),
+        typeof(Assets.Scripts.Features.Core.GameTime.WaitTimeComponent),
         typeof(Assets.Scripts.Features.Core.Identity.IdentityComponent),
         typeof(Assets.Scripts.Features.Core.Move.MoveComponent),
         typeof(Assets.Scripts.Features.Core.Position.PositionComponent),

@@ -10,7 +10,7 @@ public class ServerZombieFactory : ZombieFactoryBase
     protected override void OnCreate(GameEntity entity)
     {
         entity.AddSprite(_resourceService.GetSprite("Server/Textures/zombie"));
-        entity.AddSpriteSize(Vector2.one * entity.zombie.radius);
+        entity.AddSpriteSize(Vector2.one * entity.zombie.radius * 2);
 
         var boardObj = new GameObject("Zombie");
 

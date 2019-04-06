@@ -2,8 +2,10 @@
 using Assets.Scripts.Features.Core.GameTime;
 using Assets.Scripts.Features.Core.Move;
 using Assets.Scripts.Features.Core.Views;
+using Assets.Scripts.Features.Core.Zombies;
 using Entitas;
 using Entitas.CodeGeneration.Attributes;
+using System.Collections.Generic;
 
 public partial class Contexts
 {
@@ -18,13 +20,16 @@ public partial class Contexts
 
 namespace Assets.Scripts.EntitasExtensions
 {
-    public class FeaturesContainer : Feature
+    public class FeaturesContainer : Feature, IFixedExecuteSystem
     {
         private readonly Contexts
             _context;
 
         private readonly DependencyContainer
             _container;
+
+        private List<IFixedExecuteSystem>
+            _fixedExecuteSystems = new List<IFixedExecuteSystem>();
 
         public FeaturesContainer(Contexts context)
         {
@@ -35,11 +40,23 @@ namespace Assets.Scripts.EntitasExtensions
             Add(new GameEventSystems(context));
             Add(new GameTimeSystem());
             Add(new ViewSystem());
-            Add(new MoveSystem());
+        }
+
+        public void FixedExecute()
+        {
+            for (int i = 0; i < _fixedExecuteSystems.Count; i++)
+            {
+                _fixedExecuteSystems[i].FixedExecute();
+            }
         }
 
         public override Systems Add(ISystem system)
         {
+            if (system is IFixedExecuteSystem)
+            {
+                _fixedExecuteSystems.Add((IFixedExecuteSystem)system);
+            }
+
             _container.InjectTo(system);
 
             return base.Add(system);

@@ -11,17 +11,19 @@ public partial class GameEntity {
     public Assets.Scripts.Features.Core.Move.MoveComponent move { get { return (Assets.Scripts.Features.Core.Move.MoveComponent)GetComponent(GameComponentsLookup.Move); } }
     public bool hasMove { get { return HasComponent(GameComponentsLookup.Move); } }
 
-    public void AddMove(UnityEngine.Vector3 newPosTo, float newSpeed) {
+    public void AddMove(UnityEngine.Vector3 newMoveDir, UnityEngine.Vector3 newPosTo, float newSpeed) {
         var index = GameComponentsLookup.Move;
         var component = (Assets.Scripts.Features.Core.Move.MoveComponent)CreateComponent(index, typeof(Assets.Scripts.Features.Core.Move.MoveComponent));
+        component.moveDir = newMoveDir;
         component.posTo = newPosTo;
         component.speed = newSpeed;
         AddComponent(index, component);
     }
 
-    public void ReplaceMove(UnityEngine.Vector3 newPosTo, float newSpeed) {
+    public void ReplaceMove(UnityEngine.Vector3 newMoveDir, UnityEngine.Vector3 newPosTo, float newSpeed) {
         var index = GameComponentsLookup.Move;
         var component = (Assets.Scripts.Features.Core.Move.MoveComponent)CreateComponent(index, typeof(Assets.Scripts.Features.Core.Move.MoveComponent));
+        component.moveDir = newMoveDir;
         component.posTo = newPosTo;
         component.speed = newSpeed;
         ReplaceComponent(index, component);

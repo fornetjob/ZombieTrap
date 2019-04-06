@@ -1,6 +1,6 @@
 ﻿using Assets.Scripts.EntitasExtensions;
 using Assets.Scripts.Features.Server.Networking;
-
+using Assets.Scripts.Features.Server.Zombies;
 using UnityEngine;
 
 namespace Assets.Scripts.Features.Server
@@ -18,6 +18,7 @@ namespace Assets.Scripts.Features.Server
 
             _feature.Add(new ServerSideEventSystems(context));
             _feature.Add(new ServerSystem());
+            _feature.Add(new ZombiesMoveSystem());
         }
 
         private void Start()
@@ -28,6 +29,11 @@ namespace Assets.Scripts.Features.Server
         private void Update()
         {
             _feature.Execute();
+        }
+
+        private void FixedUpdate()
+        {
+            _feature.FixedExecute();
         }
     }
 }

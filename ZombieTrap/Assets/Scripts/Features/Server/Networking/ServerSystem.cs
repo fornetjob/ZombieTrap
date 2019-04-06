@@ -38,7 +38,7 @@ namespace Assets.Scripts.Features.Server.Networking
         void IContextInitialize.Initialize(Contexts context)
         {
             // Создадим комнату
-            _roomFactory.Create(new Bounds(Vector3.zero, new Vector3(20, 10, 1)));
+            _roomFactory.Create();
 
             _listener = new UdpListener(_serializerService,
                 new ListenConfiguration
