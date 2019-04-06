@@ -15,8 +15,6 @@ public class RoomFactory : FactoryBase
         entity.AddRoom(1000, 2, 28, 0.3f);
         entity.AddBound(RoomBound);
 
-        _context.feautures.Add(new RoomSystem(entity));
-
         return entity;
     }
 }

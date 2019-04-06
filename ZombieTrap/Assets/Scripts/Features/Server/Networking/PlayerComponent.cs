@@ -13,6 +13,7 @@ namespace Assets.Scripts.Features.Server.Networking
     [Event(EventTarget.Self)]
     public class PlayerComponent:IComponent
     {
+        [PrimaryEntityIndex]
         public Guid PlayerId;
         public IPEndPoint EndPoint;
 

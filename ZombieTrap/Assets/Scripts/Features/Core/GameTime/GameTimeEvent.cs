@@ -1,5 +1,8 @@
 ﻿public class GameTimeEvent
 {
+    private readonly object
+        _lockObj = new object();
+
     private readonly GameEntity
         _timeEntity;
 
@@ -19,18 +22,24 @@
 
     public void Reset()
     {
-        _timeTo = _timeEntity.gameTime.value + _secondsInterval;
+        lock (_lockObj)
+        {
+            _timeTo = _timeEntity.gameTime.value + _secondsInterval;
+        }
     }
 
     public bool Check()
     {
-        bool isTimeOver = _timeTo <= _timeEntity.gameTime.value;
-
-        if (isTimeOver)
+        lock (_lockObj)
         {
-            Reset();
-        }
+            bool isTimeOver = _timeTo <= _timeEntity.gameTime.value;
 
-        return isTimeOver;
+            if (isTimeOver)
+            {
+                Reset();
+            }
+
+            return isTimeOver;
+        }
     }
 }

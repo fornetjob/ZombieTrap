@@ -2,6 +2,7 @@
 using Assets.Scripts.Core.Networking.Udp;
 using Entitas;
 using System;
+using System.Net;
 
 namespace Assets.Scripts.Features.Client.Networking
 {
@@ -11,13 +12,7 @@ namespace Assets.Scripts.Features.Client.Networking
 
         private GameTimeService _gameTimeService = null;
         private SerializerService _serializerService = null;
-
-        #endregion
-
-        #region Factories
-
-        private ConnectionStateFactory _connectionStateFactory = null;
-        private MessageFactory _messageFactory = null;
+        private ClientMessageProcessor _messageProcessor = null;
 
         #endregion
 
@@ -26,41 +21,24 @@ namespace Assets.Scripts.Features.Client.Networking
         private IListener
             _listener;
 
-        private ISender
-            _sender;
-
-        private ConcurrentReceiveStack
-            _messageStack = new ConcurrentReceiveStack();
-
         private GameEntity
             _stateEntity;
 
         private GameTimeEvent
-            _tryTimeEvent;
-
-        private GameTimeEvent
             _connectionTimeEvent;
 
-        private MessageContract
-            _connectContract;
+        private ConcurrentReceiveStack
+           _strongMessagesStack = new ConcurrentReceiveStack();
 
         #endregion
 
+        #region IContextInitialize
+
         void IContextInitialize.Initialize(Contexts context)
         {
-            _connectContract = _messageFactory.CreateConnectMessage(Guid.NewGuid());
+            _stateEntity = context.game.connectionStateEntity;
 
-            _tryTimeEvent = _gameTimeService.CreateTimeEvent(0.6f);
             _connectionTimeEvent = _gameTimeService.CreateTimeEvent(1);
-
-            _stateEntity = _connectionStateFactory.Create();
-
-            _sender = new UdpSender(_serializerService, 
-                new SendConfiguration
-                {
-                    RemoteHost = "localhost",
-                    RemotePort = 32100
-                });
 
             _listener = new UdpListener(_serializerService, 
                 new ListenConfiguration
@@ -69,57 +47,63 @@ namespace Assets.Scripts.Features.Client.Networking
                     ReceiveInterval = 10
                 });
 
-            _listener.OnReceive += (endpoint, message)=> _messageStack.Push(message);
+            _listener.OnReceive += OnMessageReceive;
 
             _listener.Open();
-            _sender.Open();
         }
+
+        #endregion
+
+        #region Event handlers
+
+        private void OnMessageReceive(IPEndPoint ip, MessageContract msg)
+        {
+            if (_stateEntity.connectionState.value != ConnectionState.Active)
+            {
+                _stateEntity.ReplaceConnectionState(ConnectionState.Active, 0);
+            }
+
+            _connectionTimeEvent.Reset();
+
+            if (msg.Type.IsStrongMessage())
+            {
+                _strongMessagesStack.Push(msg);
+            }
+            else
+            {
+                _messageProcessor.Process(msg);
+            }
+        }
+
+        #endregion
 
         public void Execute()
         {
-            var connectionState = _stateEntity.connectionState.value;
-
-            bool isHasMessage = false;
-
-            MessageContract message;
-
-            if (_messageStack.TryPopMessage(out message))
-            {
-                isHasMessage = true;
-
-                _connectionTimeEvent.Reset();
-            }
-            else if (connectionState == ConnectionState.Active
-                && _connectionTimeEvent.Check())
+            if (_connectionTimeEvent.Check()
+                && _stateEntity.connectionState.value == ConnectionState.Active)
             {
                 _stateEntity.ReplaceConnectionState(ConnectionState.Lost, 0);
-
-                _tryTimeEvent.Reset();
             }
-
-            switch (connectionState)
+            else
             {
-                case ConnectionState.Connecting:
-                case ConnectionState.Lost:
-                    if (isHasMessage)
-                    {
-                        _stateEntity.ReplaceConnectionState(ConnectionState.Active, 0);
-                    }
-                    else if (_tryTimeEvent.Check())
-                    {
-                        _sender.Send(_connectContract);
+                MessageContract msg;
 
-                        _stateEntity.ReplaceConnectionState(connectionState, _stateEntity.connectionState.tryCount + 1);
-                    }
-                    break;
+                if (_strongMessagesStack.TryPopMessage(out msg))
+                {
+                    _messageProcessor.Process(msg);
+                }
             }
         }
 
-        public void TearDown()
+        #region ITearDownSystem
+
+        void ITearDownSystem.TearDown()
         {
             _listener.Close();
 
            _stateEntity.ReplaceConnectionState(ConnectionState.Closed, 0);
         }
+
+        #endregion
     }
 }

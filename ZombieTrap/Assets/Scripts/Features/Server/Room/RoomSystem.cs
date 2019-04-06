@@ -18,6 +18,7 @@ namespace Assets.Scripts.Features.Server.Room
 
         private ServerZombieFactory _serverZombieFactory = null;
         private ServerBoardFactory _boardFactory = null;
+        private RoomFactory _roomFactory = null;
 
         #endregion
 
@@ -38,13 +39,9 @@ namespace Assets.Scripts.Features.Server.Room
 
         #endregion
 
-        public RoomSystem(ServerSideEntity room)
-        {
-            _roomEntity = room;
-        }
-
         void IInitializeSystem.Initialize()
         {
+            _roomEntity = _roomFactory.Create();
             _boardFactory.Create(_roomEntity.bound.value);
 
             _spawnTimeEvent = _gameTimeService.CreateTimeEvent(_roomEntity.room.SpawnTimeInterval);

@@ -1,4 +1,5 @@
 ﻿using Assets.Scripts.EntitasExtensions;
+using Assets.Scripts.Features.Client.Move;
 using Assets.Scripts.Features.Client.Networking;
 
 using UnityEngine;
@@ -16,7 +17,9 @@ namespace Assets.Scripts.Features.Client
 
             _feature = context.feautures;
 
+            _feature.Add(new ClientConnectSystem());
             _feature.Add(new ClientSystem());
+            _feature.Add(new MoveSystem());
         }
 
         private void Start()

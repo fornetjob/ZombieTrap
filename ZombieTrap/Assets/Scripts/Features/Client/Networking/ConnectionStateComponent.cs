@@ -4,6 +4,7 @@ using Entitas.CodeGeneration.Attributes;
 
 namespace Assets.Scripts.Features.Client.Networking
 {
+    [Unique]
     [Event(EventTarget.Self)]
     public class ConnectionStateComponent:IComponent
     {

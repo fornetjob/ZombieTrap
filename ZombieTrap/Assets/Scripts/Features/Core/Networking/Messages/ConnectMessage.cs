@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Assets.Scripts.Core.Networking.Messages
+namespace Assets.Scripts.Features.Core.Networking.Messages
 {
     [ProtoBuf.ProtoContract]
     public class ConnectMessage

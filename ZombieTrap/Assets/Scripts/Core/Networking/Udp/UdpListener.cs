@@ -61,7 +61,7 @@ namespace Assets.Scripts.Core.Networking.Udp
                             {
                                 var message = _serializerService.Defragment(fragment);
 
-                                if (message.Type == MessageType.Message)
+                                if (message.Type.IsStrongMessage())
                                 {
                                     var reply = new MessageContract
                                     {
