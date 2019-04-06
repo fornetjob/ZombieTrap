@@ -9,26 +9,53 @@
 public static class GameComponentsLookup {
 
     public const int ConnectionState = 0;
-    public const int Destroy = 1;
-    public const int GameTime = 2;
-    public const int View = 3;
-    public const int ConnectionStateListener = 4;
+    public const int Board = 1;
+    public const int Bound = 2;
+    public const int Destroy = 3;
+    public const int GameTime = 4;
+    public const int Identity = 5;
+    public const int Move = 6;
+    public const int Position = 7;
+    public const int Sprite = 8;
+    public const int SpriteSize = 9;
+    public const int View = 10;
+    public const int Zombie = 11;
+    public const int ConnectionStateListener = 12;
+    public const int PositionListener = 13;
 
-    public const int TotalComponents = 5;
+    public const int TotalComponents = 14;
 
     public static readonly string[] componentNames = {
         "ConnectionState",
+        "Board",
+        "Bound",
         "Destroy",
         "GameTime",
+        "Identity",
+        "Move",
+        "Position",
+        "Sprite",
+        "SpriteSize",
         "View",
-        "ConnectionStateListener"
+        "Zombie",
+        "ConnectionStateListener",
+        "PositionListener"
     };
 
     public static readonly System.Type[] componentTypes = {
         typeof(Assets.Scripts.Features.Client.Networking.ConnectionStateComponent),
+        typeof(Assets.Scripts.Features.Core.Board.BoardComponent),
+        typeof(Assets.Scripts.Features.Core.Bound.BoundComponent),
         typeof(Assets.Scripts.Features.Core.Destroy.DestroyComponent),
         typeof(Assets.Scripts.Features.Core.GameTime.GameTimeComponent),
+        typeof(Assets.Scripts.Features.Core.Identity.IdentityComponent),
+        typeof(Assets.Scripts.Features.Core.Move.MoveComponent),
+        typeof(Assets.Scripts.Features.Core.Position.PositionComponent),
+        typeof(Assets.Scripts.Features.Core.Sprites.SpriteComponent),
+        typeof(Assets.Scripts.Features.Core.Sprites.SpriteSizeComponent),
         typeof(Assets.Scripts.Features.Core.Views.ViewComponent),
-        typeof(ConnectionStateListenerComponent)
+        typeof(Assets.Scripts.Features.Core.Zombies.ZombieComponent),
+        typeof(ConnectionStateListenerComponent),
+        typeof(PositionListenerComponent)
     };
 }

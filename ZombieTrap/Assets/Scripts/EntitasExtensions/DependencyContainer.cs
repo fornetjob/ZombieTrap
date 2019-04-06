@@ -7,7 +7,7 @@ using System.Reflection;
 
 public partial class Contexts
 {
-    public DependencyContainer dependencies;
+    public IDependencyContainer dependencies;
 
     [PostConstructor]
     public void OnPostContructor()
@@ -18,7 +18,7 @@ public partial class Contexts
 
 namespace Assets.Scripts.EntitasExtensions
 {
-    public class DependencyContainer
+    public class DependencyContainer: IDependencyContainer
     {
         private readonly Contexts
             _context;
@@ -40,9 +40,24 @@ namespace Assets.Scripts.EntitasExtensions
             _context = context;
         }
 
-        public void Registrate(Type dependencyType, Type interfaceType)
+        public void Registrate<TInterface, TDependency>()
         {
-            AddDependency(GetTypeKey(interfaceType), dependencyType);
+            Registrate(typeof(TInterface), typeof(TDependency));
+        }
+
+        public T Provide<T>()
+            where T:IDependency
+        {
+            var type = typeof(T);
+
+            var typeKey = GetTypeKey(type);
+
+            if (_dict.ContainsKey(typeKey) == false)
+            {
+                AddDependency(typeKey, type);
+            }
+
+            return (T)_dict[typeKey];
         }
 
         public void InjectTo(object obj)
@@ -83,6 +98,10 @@ namespace Assets.Scripts.EntitasExtensions
                         {
                             field.SetValue(obj, _context.game.GetGroup(GameMatcher.AllOf(grAttr.ComponentIndexes)));
                         }
+                        else if (field.FieldType == typeof(IGroup<ServerSideEntity>))
+                        {
+                            field.SetValue(obj, _context.serverSide.GetGroup(ServerSideMatcher.AllOf(grAttr.ComponentIndexes)));
+                        }
                         else
                         {
                             throw new NotSupportedException(field.FieldType.Name);
@@ -92,6 +111,11 @@ namespace Assets.Scripts.EntitasExtensions
             }
 
             CheckInterfaces(obj);
+        }
+
+        private void Registrate(Type interfaceType, Type dependencyType)
+        {
+            AddDependency(GetTypeKey(interfaceType), dependencyType);
         }
 
         private void CheckInterfaces(object dependency)

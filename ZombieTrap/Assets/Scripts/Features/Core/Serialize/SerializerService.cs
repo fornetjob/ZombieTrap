@@ -11,22 +11,28 @@ public class SerializerService : IService
 
     public T Deserialize<T>(byte[] data)
     {
-        _stream.Position = 0;
-        _stream.SetLength(0);
-        _stream.Write(data, 0, data.Length);
-        _stream.Position = 0;
+        lock (_stream)
+        {
+            _stream.Position = 0;
+            _stream.SetLength(0);
+            _stream.Write(data, 0, data.Length);
+            _stream.Position = 0;
 
-        return ProtoBuf.Serializer.Deserialize<T>(_stream);
+            return ProtoBuf.Serializer.Deserialize<T>(_stream);
+        }
     }
 
     public byte[] Serialize<T>(T item)
     {
-        _stream.Position = 0;
-        _stream.SetLength(0);
+        lock (_stream)
+        {
+            _stream.Position = 0;
+            _stream.SetLength(0);
 
-        ProtoBuf.Serializer.Serialize(_stream, item);
+            ProtoBuf.Serializer.Serialize(_stream, item);
 
-        return _stream.ToArray();
+            return _stream.ToArray();
+        }
     }
 
     public MessageContract Defragment(params MessageFragment[] fragments)
@@ -45,22 +51,34 @@ public class SerializerService : IService
 
         var fragments = new MessageFragment[fragmentCount];
 
-        for (ushort i = 0; i < fragmentCount; i++)
+        if (fragmentCount == 1)
         {
-            var offset = i * FragmentSize;
-
-            var lenght = Math.Min(bytes.Length - offset, FragmentSize);
-
-            var data = new byte[lenght];
-
-            Array.Copy(bytes, offset, data, 0, lenght);
-
-            fragments[i] = new MessageFragment
+            fragments[0] = new MessageFragment
             {
-                Index = i,
+                Index = 0,
                 Count = fragmentCount,
-                Data = data
+                Data = bytes
             };
+        }
+        else
+        {
+            for (ushort i = 0; i < fragmentCount; i++)
+            {
+                var offset = i * FragmentSize;
+
+                var lenght = Math.Min(bytes.Length - offset, FragmentSize);
+
+                var data = new byte[lenght];
+
+                Array.Copy(bytes, offset, data, 0, lenght);
+
+                fragments[i] = new MessageFragment
+                {
+                    Index = i,
+                    Count = fragmentCount,
+                    Data = data
+                };
+            }
         }
 
         return fragments;

@@ -10,13 +10,13 @@ namespace Assets.Scripts.Features.Client.Networking
         #region Services
 
         private GameTimeService _gameTimeService = null;
+        private SerializerService _serializerService = null;
 
         #endregion
 
         #region Factories
 
         private ConnectionStateFactory _connectionStateFactory = null;
-
         private MessageFactory _messageFactory = null;
 
         #endregion
@@ -55,17 +55,19 @@ namespace Assets.Scripts.Features.Client.Networking
 
             _stateEntity = _connectionStateFactory.Create();
 
-            _sender = new UdpSender(new SendConfiguration
-            {
-                RemoteHost = "127.1.0.0",
-                RemotePort = 32100
-            });
+            _sender = new UdpSender(_serializerService, 
+                new SendConfiguration
+                {
+                    RemoteHost = "localhost",
+                    RemotePort = 32100
+                });
 
-            _listener = new UdpListener(new ListenConfiguration
-            {
-                ListeningPort = 32000,
-                ReceiveInterval = 10
-            });
+            _listener = new UdpListener(_serializerService, 
+                new ListenConfiguration
+                {
+                    ListeningPort = 32000,
+                    ReceiveInterval = 10
+                });
 
             _listener.OnReceive += (endpoint, message)=> _messageStack.Push(message);
 

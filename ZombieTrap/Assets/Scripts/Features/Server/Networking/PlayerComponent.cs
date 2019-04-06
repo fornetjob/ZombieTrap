@@ -1,17 +1,21 @@
 ﻿using Assets.Scripts.Core.Networking;
+
+using Entitas;
+using Entitas.CodeGeneration.Attributes;
+
 using System;
 using System.Collections.Generic;
 using System.Net;
 
 namespace Assets.Scripts.Features.Server.Networking
 {
-    public class ClientContract
+    [ServerSide]
+    [Event(EventTarget.Self)]
+    public class PlayerComponent:IComponent
     {
-        public ulong Id;
-
         public Guid PlayerId;
         public IPEndPoint EndPoint;
 
-        public Queue<MessageContract> StrongMessagesQueue = new Queue<MessageContract>();
+        public Queue<MessageContract> StrongMessagesQueue;
     }
 }

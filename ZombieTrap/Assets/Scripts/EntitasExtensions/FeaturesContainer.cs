@@ -1,4 +1,20 @@
-﻿using Entitas;
+﻿using Assets.Scripts.EntitasExtensions;
+using Assets.Scripts.Features.Core.GameTime;
+using Assets.Scripts.Features.Core.Move;
+using Assets.Scripts.Features.Core.Views;
+using Entitas;
+using Entitas.CodeGeneration.Attributes;
+
+public partial class Contexts
+{
+    public FeaturesContainer feautures;
+
+    [PostConstructor]
+    public void OnFeaturesPostContructor()
+    {
+        feautures = new FeaturesContainer(this);
+    }
+}
 
 namespace Assets.Scripts.EntitasExtensions
 {
@@ -14,7 +30,12 @@ namespace Assets.Scripts.EntitasExtensions
         {
             _context = context;
 
-            _container = new DependencyContainer(context);
+            _container = (DependencyContainer)_context.dependencies;
+
+            Add(new GameEventSystems(context));
+            Add(new GameTimeSystem());
+            Add(new ViewSystem());
+            Add(new MoveSystem());
         }
 
         public override Systems Add(ISystem system)

@@ -1,12 +1,10 @@
 ﻿using Assets.Scripts.Core.Networking;
 using Assets.Scripts.Core.Networking.Messages;
 using System;
-using System.IO;
 
 public class MessageFactory : IDependency
 {
-    private MemoryStream
-        _stream = new MemoryStream();
+    private SerializerService _serializerService = null;
 
     public MessageContract CreateConnectMessage(Guid playerIdentity)
     {
@@ -18,17 +16,7 @@ public class MessageFactory : IDependency
         return new MessageContract
         {
             Type = MessageType.Connect,
-            Data = GetBytes(connectMessage)
+            Data = _serializerService.Serialize(connectMessage)
         };
-    }
-
-    private byte[] GetBytes<T>(T msg)
-    {
-        _stream.Position = 0;
-        _stream.SetLength(0);
-
-        ProtoBuf.Serializer.Serialize(_stream, msg);
-
-        return _stream.ToArray();
     }
 }

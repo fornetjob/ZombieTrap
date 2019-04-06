@@ -8,15 +8,19 @@ public class NetworkingTest
     [Test]
     public void Connect()
     {
-        var messageFactory = new MessageFactory();
+        var context = new Contexts();
 
-        using (var clientSender = new UdpSender(new SendConfiguration
+        var messageFactory = context.dependencies.Provide<MessageFactory>();
+
+        var serializerService = context.dependencies.Provide<SerializerService>();
+
+        using (var clientSender = new UdpSender(serializerService, new SendConfiguration
         {
             RemoteHost = "localhost",
             RemotePort = 32100
         }))
         {
-            using (var serverListener = new UdpListener(new ListenConfiguration
+            using (var serverListener = new UdpListener(serializerService, new ListenConfiguration
             {
                 ListeningPort = 32100,
                 ReceiveInterval = 10
@@ -24,7 +28,7 @@ public class NetworkingTest
             {
                 bool isConnected = false;
 
-                int timeOut = 100;
+                int tryCount = 100;
 
                 serverListener.OnReceive += (endpoint, message) =>
                 {
@@ -41,11 +45,11 @@ public class NetworkingTest
                 var connectMsg = messageFactory.CreateConnectMessage(Guid.NewGuid());
 
                 while (isConnected == false
-                    && timeOut > 0)
+                    && tryCount > 0)
                 {
                     clientSender.Send(connectMsg);
 
-                    timeOut--;
+                    tryCount--;
 
                     System.Threading.Thread.Sleep(10);
                 }
