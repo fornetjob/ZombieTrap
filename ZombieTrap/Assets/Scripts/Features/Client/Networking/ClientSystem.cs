@@ -57,14 +57,14 @@ namespace Assets.Scripts.Features.Client.Networking
 
             _sender = new UdpSender(new SendConfiguration
             {
-                RemoteHost = "localhost",
+                RemoteHost = "127.1.0.0",
                 RemotePort = 32100
             });
 
             _listener = new UdpListener(new ListenConfiguration
             {
                 ListeningPort = 32000,
-                ReceiveTimeout = 1000
+                ReceiveInterval = 10
             });
 
             _listener.OnReceive += (endpoint, message)=> _messageStack.Push(message);

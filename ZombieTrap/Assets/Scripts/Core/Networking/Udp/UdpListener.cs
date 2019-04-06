@@ -1,10 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Net;
 using System.Net.Sockets;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Assets.Scripts.Core.Networking.Udp
 {
-    public class UdpListener : IListener
+    public class UdpListener : IListener, IDisposable
     {
         #region Fields
 
@@ -14,8 +17,8 @@ namespace Assets.Scripts.Core.Networking.Udp
         private bool
             _isOpened;
 
-        private MessageFragmenter
-            _fragmenter = new MessageFragmenter();
+        private SerializerService
+            _serializerService = new SerializerService();
 
         private Dictionary<int, MessageFragment[]>
             _fragmentDict = new Dictionary<int, MessageFragment[]>();
@@ -33,46 +36,52 @@ namespace Assets.Scripts.Core.Networking.Udp
         {
             if (_isOpened)
             {
-                throw new System.NotSupportedException("Listener already opened");
+                throw new NotSupportedException("Listener already opened");
             }
 
             _isOpened = true;
 
-            Task.Run(async () =>
+            Task.Run(() =>
             {
                 using (var listener = new UdpClient(_config.ListeningPort))
                 {
-                    listener.Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReceiveTimeout, _config.ReceiveTimeout);
+                    listener.Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReceiveTimeout, _config.ReceiveInterval);
 
                     while (_isOpened)
                     {
-                        var receivedResults = await listener.ReceiveAsync();
-
-                        var fragment = new MessageFragment(receivedResults.Buffer);
-
-                        if (fragment.Index + 1 == fragment.Count)
+                        if (listener.Available > 0)
                         {
-                            var message = _fragmenter.Defragment(fragment);
+                            IPEndPoint ip = null;
+                            byte[] data = listener.Receive(ref ip);
 
-                            if (message.Type == MessageType.Message)
+                            var fragment = _serializerService.Deserialize<MessageFragment>(data);
+
+                            if (fragment.Index + 1 == fragment.Count)
                             {
-                                var reply = new MessageContract
+                                var message = _serializerService.Defragment(fragment);
+
+                                if (message.Type == MessageType.Message)
                                 {
-                                    Id = message.Id,
-                                    Type = MessageType.Reply
-                                };
+                                    var reply = new MessageContract
+                                    {
+                                        Id = message.Id,
+                                        Type = MessageType.Reply
+                                    };
 
-                                var data = _fragmenter.Fragment(reply)[0].Data;
+                                    var replyData = _serializerService.Fragment(reply)[0].Data;
 
-                                listener.Send(data, data.Length, receivedResults.RemoteEndPoint);
+                                    listener.Send(replyData, replyData.Length, ip);
+                                }
+
+                                OnReceive(ip, message);
                             }
+                            else
+                            {
+                                throw new NotSupportedException();
+                            }
+                        }
 
-                            OnReceive(receivedResults.RemoteEndPoint, message);
-                        }
-                        else
-                        {
-                            throw new System.NotSupportedException();
-                        }
+                        Thread.Sleep(_config.ReceiveInterval);
                     }
                 }
             });
@@ -83,6 +92,12 @@ namespace Assets.Scripts.Core.Networking.Udp
             _isOpened = false;
         }
 
-      
+        public void Dispose()
+        {
+            if (_isOpened)
+            {
+                Close();
+            }
+        }
     }
 }

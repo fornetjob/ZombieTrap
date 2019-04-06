@@ -3,6 +3,6 @@
     public class ListenConfiguration
     {
         public int ListeningPort;
-        public int ReceiveTimeout;
+        public int ReceiveInterval;
     }
 }

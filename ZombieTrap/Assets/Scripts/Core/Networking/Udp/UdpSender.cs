@@ -1,8 +1,9 @@
-﻿using System.Net.Sockets;
+﻿using System;
+using System.Net.Sockets;
 
 namespace Assets.Scripts.Core.Networking.Udp
 {
-    public class UdpSender:ISender
+    public class UdpSender:ISender, IDisposable
     {
         private SendConfiguration
             _configuration;
@@ -10,8 +11,8 @@ namespace Assets.Scripts.Core.Networking.Udp
         private UdpClient
             _sendclient;
 
-        private MessageFragmenter
-            _fragmenter = new MessageFragmenter();
+        private SerializerService
+            _serializerService = new SerializerService();
 
         public UdpSender(SendConfiguration configuration)
         {
@@ -40,17 +41,28 @@ namespace Assets.Scripts.Core.Networking.Udp
         public void Close()
         {
             _sendclient.Close();
+            _sendclient = null;
         }
 
         public void Send(MessageContract msg)
         {
-            var fragments = _fragmenter.Fragment(msg);
+            var fragments = _serializerService.Fragment(msg);
 
             for (int i = 0; i < fragments.Length; i++)
             {
                 var fragment = fragments[i];
 
-                _sendclient.Send(fragment.Data, fragment.Data.Length);
+                var data = _serializerService.Serialize(fragment);
+
+                _sendclient.Send(data, data.Length);
+            }
+        }
+
+        public void Dispose()
+        {
+            if (_sendclient != null)
+            {
+                Close();
             }
         }
     }

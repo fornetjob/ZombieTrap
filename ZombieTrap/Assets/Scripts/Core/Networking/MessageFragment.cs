@@ -1,19 +1,15 @@
-﻿using System;
-
-namespace Assets.Scripts.Core.Networking
+﻿namespace Assets.Scripts.Core.Networking
 {
+    [ProtoBuf.ProtoContract]
     public class MessageFragment
     {
-        public const int HeaderSize = 4;
+        public const int FragmentHeaderSize = 4;
 
-        public MessageFragment(byte[] data)
-        {
-            Data = data;
-        }
-
-        public ushort Index { get { return BitConverter.ToUInt16(Data, 0); } }
-        public ushort Count { get { return BitConverter.ToUInt16(Data, 0 + 2); } }
-
+        [ProtoBuf.ProtoMember(1)]
+        public ushort Index;
+        [ProtoBuf.ProtoMember(2)]
+        public ushort Count;
+        [ProtoBuf.ProtoMember(3)]
         public byte[] Data;
     }
 }

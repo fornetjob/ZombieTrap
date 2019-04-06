@@ -8,19 +8,16 @@ namespace Assets.Scripts.Core.Networking
         #region Fields
 
         private long
-            _realLenghth;
+            _lenght;
 
         private int
-            _realPosition;
+            _position;
 
         private MessageFragment[]
             _fragments;
 
         private int
             _fragmentSize;
-
-        private int
-            _realFragmentSize;
 
         #endregion
 
@@ -31,13 +28,12 @@ namespace Assets.Scripts.Core.Networking
             _fragments = fragments;
 
             _fragmentSize = fragments[0].Data.Length;
-            _realFragmentSize = _fragmentSize - MessageFragment.HeaderSize;
 
-            _realLenghth = 0;
+            _lenght = 0;
 
             for (int i = 0; i < fragments.Length; i++)
             {
-                _realLenghth += fragments[i].Data.Length - MessageFragment.HeaderSize;
+                _lenght += fragments[i].Data.Length;
             }
         }
 
@@ -55,7 +51,7 @@ namespace Assets.Scripts.Core.Networking
         {
             get
             {
-                return _realLenghth;
+                return _lenght;
             }
         }
 
@@ -63,11 +59,11 @@ namespace Assets.Scripts.Core.Networking
         {
             get
             {
-                return _realPosition;
+                return _position;
             }
             set
             {
-                _realPosition = (int)value;
+                _position = (int)value;
             }
         }
 
@@ -75,20 +71,25 @@ namespace Assets.Scripts.Core.Networking
 
         public override void Flush()
         {
-            _realPosition = 0;
+            _position = 0;
         }
 
         public override int Read(byte[] buffer, int offset, int count)
         {
-            var fragmentIndex = _realPosition / _realFragmentSize;
-            var fragmentByteIndex = (_realPosition + fragmentIndex * MessageFragment.HeaderSize) % _fragmentSize;
+            if (_position == _lenght)
+            {
+                return 0;
+            }
+
+            var fragmentIndex = _position / _fragmentSize;
+            var fragmentByteIndex = _position % _fragmentSize;
 
             var fragment = _fragments[fragmentIndex];
             var readSize = Math.Min(count, fragment.Data.Length - fragmentByteIndex);
 
             Array.Copy(fragment.Data, fragmentByteIndex, buffer, offset, readSize);
 
-            _realPosition += readSize;
+            _position += readSize;
 
             return readSize;
         }
@@ -100,7 +101,7 @@ namespace Assets.Scripts.Core.Networking
 
         public override void SetLength(long value)
         {
-            _realLenghth = value;
+            _lenght = value;
         }
 
         public override void Write(byte[] buffer, int offset, int count)
