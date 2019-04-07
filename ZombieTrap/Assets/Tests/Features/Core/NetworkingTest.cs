@@ -14,13 +14,13 @@ public class NetworkingTest
 
         var serializerService = context.dependencies.Provide<SerializerService>();
 
-        using (var clientSender = new UdpSender(serializerService, new SendConfiguration
+        using (var clientSender = new UdpSender(new SendConfiguration
         {
             RemoteHost = "localhost",
             RemotePort = 32100
         }))
         {
-            using (var serverListener = new UdpListener(serializerService, new ListenConfiguration
+            using (var serverListener = new UdpListener(new ListenConfiguration
             {
                 ListeningPort = 32100,
                 ReceiveInterval = 10

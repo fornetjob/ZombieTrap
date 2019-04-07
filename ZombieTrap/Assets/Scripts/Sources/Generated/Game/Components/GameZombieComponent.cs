@@ -11,7 +11,7 @@ public partial class GameEntity {
     public Assets.Scripts.Features.Core.Zombies.ZombieComponent zombie { get { return (Assets.Scripts.Features.Core.Zombies.ZombieComponent)GetComponent(GameComponentsLookup.Zombie); } }
     public bool hasZombie { get { return HasComponent(GameComponentsLookup.Zombie); } }
 
-    public void AddZombie(Assets.Scripts.Features.Core.Zombies.ZombieType newType, float newRadius) {
+    public void AddZombie(Assets.Scripts.Core.Zombies.ZombieType newType, float newRadius) {
         var index = GameComponentsLookup.Zombie;
         var component = (Assets.Scripts.Features.Core.Zombies.ZombieComponent)CreateComponent(index, typeof(Assets.Scripts.Features.Core.Zombies.ZombieComponent));
         component.type = newType;
@@ -19,7 +19,7 @@ public partial class GameEntity {
         AddComponent(index, component);
     }
 
-    public void ReplaceZombie(Assets.Scripts.Features.Core.Zombies.ZombieType newType, float newRadius) {
+    public void ReplaceZombie(Assets.Scripts.Core.Zombies.ZombieType newType, float newRadius) {
         var index = GameComponentsLookup.Zombie;
         var component = (Assets.Scripts.Features.Core.Zombies.ZombieComponent)CreateComponent(index, typeof(Assets.Scripts.Features.Core.Zombies.ZombieComponent));
         component.type = newType;

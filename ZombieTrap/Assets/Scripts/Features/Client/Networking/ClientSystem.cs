@@ -40,8 +40,7 @@ namespace Assets.Scripts.Features.Client.Networking
 
             _connectionTimeEvent = _gameTimeService.CreateTimeEvent(1);
 
-            _listener = new UdpListener(_serializerService, 
-                new ListenConfiguration
+            _listener = new UdpListener(new ListenConfiguration
                 {
                     ListeningPort = 32000,
                     ReceiveInterval = 10

@@ -26,6 +26,11 @@ public sealed class WeakDictionary<TKey, TValue>
 
     #region ctor
 
+    public WeakDictionary(Func<TValue> loadNotExistFunc)
+      : this((key) => loadNotExistFunc())
+    {
+    }
+
     /// <summary>
     /// Конструктор
     /// </summary>

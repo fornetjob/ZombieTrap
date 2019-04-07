@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Assets.Scripts.Features.Core.Bound
 {
-    [Game, ServerSide]
+    [Game]
     public class BoundComponent:IComponent
     {
         public Bounds value;

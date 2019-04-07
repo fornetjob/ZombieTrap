@@ -25,7 +25,7 @@ namespace Assets.Scripts.EntitasExtensions
         private readonly Contexts
             _context;
 
-        private readonly DependencyContainer
+        private readonly EntitasDependencyContainer
             _container;
 
         private List<IFixedExecuteSystem>
@@ -35,7 +35,7 @@ namespace Assets.Scripts.EntitasExtensions
         {
             _context = context;
 
-            _container = (DependencyContainer)_context.dependencies;
+            _container = (EntitasDependencyContainer)_context.dependencies;
 
             Add(new GameEventSystems(context));
             Add(new GameTimeSystem());

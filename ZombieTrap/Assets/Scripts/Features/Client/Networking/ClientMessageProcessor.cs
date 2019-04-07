@@ -1,5 +1,5 @@
 ﻿using Assets.Scripts.Core.Networking;
-using Assets.Scripts.Features.Core.Networking.Messages;
+using Assets.Scripts.Core.Networking.Messages;
 
 namespace Assets.Scripts.Features.Client.Networking
 {

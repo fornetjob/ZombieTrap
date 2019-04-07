@@ -48,8 +48,7 @@ namespace Assets.Scripts.Features.Client.Networking
 
             _tryTimeEvent = _gameTimeService.CreateTimeEvent(0.6f);
 
-            _sender = new UdpSender(_serializerService,
-                new SendConfiguration
+            _sender = new UdpSender(new SendConfiguration
                 {
                     RemoteHost = "localhost",
                     RemotePort = 32100

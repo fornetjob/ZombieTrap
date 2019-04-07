@@ -1,7 +1,8 @@
 {
     "name": "Tests",
     "references": [
-        "Game"
+        "Game",
+        "Game.Core"
     ],
     "optionalUnityReferences": [
         "TestAssemblies"

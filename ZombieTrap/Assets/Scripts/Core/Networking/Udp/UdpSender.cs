@@ -12,12 +12,11 @@ namespace Assets.Scripts.Core.Networking.Udp
             _sendclient;
 
         private SerializerService
-            _serializerService;
+            _serializerService = new SerializerService();
 
-        public UdpSender(SerializerService serializerService, SendConfiguration configuration)
+        public UdpSender( SendConfiguration configuration)
         {
             _configuration = configuration;
-            _serializerService = serializerService;
         }
 
         public void Open()

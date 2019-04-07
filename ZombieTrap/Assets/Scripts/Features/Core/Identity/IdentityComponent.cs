@@ -3,7 +3,7 @@ using Entitas.CodeGeneration.Attributes;
 
 namespace Assets.Scripts.Features.Core.Identity
 {
-    [Game, ServerSide]
+    [Game]
     public class IdentityComponent:IComponent
     {
         [PrimaryEntityIndex]

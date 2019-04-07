@@ -23,14 +23,12 @@ public partial class Contexts : Entitas.IContexts {
 
     public GameContext game { get; set; }
     public InputContext input { get; set; }
-    public ServerSideContext serverSide { get; set; }
 
-    public Entitas.IContext[] allContexts { get { return new Entitas.IContext [] { game, input, serverSide }; } }
+    public Entitas.IContext[] allContexts { get { return new Entitas.IContext [] { game, input }; } }
 
     public Contexts() {
         game = new GameContext();
         input = new InputContext();
-        serverSide = new ServerSideContext();
 
         var postConstructors = System.Linq.Enumerable.Where(
             GetType().GetMethods(),
@@ -61,7 +59,6 @@ public partial class Contexts : Entitas.IContexts {
 public partial class Contexts {
 
     public const string Identity = "Identity";
-    public const string Player = "Player";
 
     [Entitas.CodeGeneration.Attributes.PostConstructor]
     public void InitializeEntityIndices() {
@@ -69,15 +66,6 @@ public partial class Contexts {
             Identity,
             game.GetGroup(GameMatcher.Identity),
             (e, c) => ((Assets.Scripts.Features.Core.Identity.IdentityComponent)c).value));
-        serverSide.AddEntityIndex(new Entitas.PrimaryEntityIndex<ServerSideEntity, ulong>(
-            Identity,
-            serverSide.GetGroup(ServerSideMatcher.Identity),
-            (e, c) => ((Assets.Scripts.Features.Core.Identity.IdentityComponent)c).value));
-
-        serverSide.AddEntityIndex(new Entitas.PrimaryEntityIndex<ServerSideEntity, System.Guid>(
-            Player,
-            serverSide.GetGroup(ServerSideMatcher.Player),
-            (e, c) => ((Assets.Scripts.Features.Server.Networking.PlayerComponent)c).PlayerId));
     }
 }
 
@@ -85,14 +73,6 @@ public static class ContextsExtensions {
 
     public static GameEntity GetEntityWithIdentity(this GameContext context, ulong value) {
         return ((Entitas.PrimaryEntityIndex<GameEntity, ulong>)context.GetEntityIndex(Contexts.Identity)).GetEntity(value);
-    }
-
-    public static ServerSideEntity GetEntityWithIdentity(this ServerSideContext context, ulong value) {
-        return ((Entitas.PrimaryEntityIndex<ServerSideEntity, ulong>)context.GetEntityIndex(Contexts.Identity)).GetEntity(value);
-    }
-
-    public static ServerSideEntity GetEntityWithPlayer(this ServerSideContext context, System.Guid PlayerId) {
-        return ((Entitas.PrimaryEntityIndex<ServerSideEntity, System.Guid>)context.GetEntityIndex(Contexts.Player)).GetEntity(PlayerId);
     }
 }
 //------------------------------------------------------------------------------
@@ -112,7 +92,6 @@ public partial class Contexts {
         try {
             CreateContextObserver(game);
             CreateContextObserver(input);
-            CreateContextObserver(serverSide);
         } catch(System.Exception) {
         }
     }

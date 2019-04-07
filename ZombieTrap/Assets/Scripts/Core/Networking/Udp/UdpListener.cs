@@ -18,7 +18,7 @@ namespace Assets.Scripts.Core.Networking.Udp
             _isOpened;
 
         private SerializerService
-            _serializerService;
+            _serializerService = new SerializerService();
 
         private Dictionary<int, MessageFragment[]>
             _fragmentDict = new Dictionary<int, MessageFragment[]>();
@@ -27,9 +27,8 @@ namespace Assets.Scripts.Core.Networking.Udp
 
         public event MessageEventHandler OnReceive;
 
-        public UdpListener(SerializerService serializerService, ListenConfiguration config)
+        public UdpListener(ListenConfiguration config)
         {
-            _serializerService = serializerService;
             _config = config;
         }
 

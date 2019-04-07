@@ -4,7 +4,8 @@
     {
         public static bool IsStrongMessage(this MessageType type)
         {
-            return type == MessageType.Zombies;
+            return type == MessageType.Connect
+                || type == MessageType.Zombies;
         }
     }
 
