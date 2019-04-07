@@ -1,5 +1,5 @@
-﻿using Assets.Scripts.Core.Networking;
-using Assets.Scripts.Core.Networking.Messages;
+﻿using Game.Core.Networking;
+using Game.Core.Networking.Messages;
 
 using System;
 using UnityEngine;
@@ -27,7 +27,7 @@ public class MessageFactory : IDependency
         var msg = new PositionsMessage
         {
             Identities = new ulong[zombies.Length],
-            Positions = new Vector2[zombies.Length]
+            Positions = new Game.Core.Vector2Float[zombies.Length]
         };
 
         for (int i = 0; i < zombies.Length; i++)
@@ -35,7 +35,7 @@ public class MessageFactory : IDependency
             var zombie = zombies[i];
 
             msg.Identities[i] = zombie.identity.value;
-            msg.Positions[i] = zombie.position.value;
+            msg.Positions[i] = new Game.Core.Vector2Float(zombie.position.value.x, zombie.position.value.y);
         }
 
         return msg;

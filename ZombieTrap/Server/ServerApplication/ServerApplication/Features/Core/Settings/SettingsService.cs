@@ -1,4 +1,5 @@
-﻿using Assets.Scripts.Core.Zombies;
+﻿using Game.Core.Zombies;
+
 using System;
 using System.Configuration;
 

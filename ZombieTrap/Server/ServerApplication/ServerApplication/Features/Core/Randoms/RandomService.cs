@@ -1,4 +1,4 @@
-﻿using Assets.Scripts.Core;
+﻿using Game.Core;
 using System;
 
 public class RandomService:IService

@@ -1,4 +1,4 @@
-﻿using Assets.Scripts.Core;
+﻿using Game.Core;
 using ServerApplication.Features.Zombies;
 
 public class ZombiesMoveSystem : IFixedExecuteSystem

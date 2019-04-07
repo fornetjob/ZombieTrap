@@ -1,4 +1,4 @@
-﻿using Assets.Scripts.Core.Networking;
+﻿using Game.Core.Networking;
 using System.Collections.Generic;
 
 namespace ServerApplication.Features.Core.Messages

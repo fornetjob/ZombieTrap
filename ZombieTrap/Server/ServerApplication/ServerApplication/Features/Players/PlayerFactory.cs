@@ -1,4 +1,4 @@
-﻿using Assets.Scripts.Core.Networking.Udp;
+﻿using Game.Core.Networking.Udp;
 using ServerApplication.Features.Players;
 
 using System;

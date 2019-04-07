@@ -1,4 +1,4 @@
-﻿using Assets.Scripts.Core.Zombies;
+﻿using Game.Core.Zombies;
 using UnityEngine;
 
 namespace Assets.Scripts.Features.Core.Zombies

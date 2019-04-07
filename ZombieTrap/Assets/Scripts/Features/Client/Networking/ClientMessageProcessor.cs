@@ -1,5 +1,5 @@
-﻿using Assets.Scripts.Core.Networking;
-using Assets.Scripts.Core.Networking.Messages;
+﻿using Game.Core.Networking;
+using Game.Core.Networking.Messages;
 
 namespace Assets.Scripts.Features.Client.Networking
 {
@@ -59,7 +59,7 @@ namespace Assets.Scripts.Features.Client.Networking
 
                 if (enemy != null)
                 {
-                    enemy.ReplacePosition(pos);
+                    enemy.ReplacePosition(new UnityEngine.Vector3(pos.x, pos.y));
                 }
             }
         }

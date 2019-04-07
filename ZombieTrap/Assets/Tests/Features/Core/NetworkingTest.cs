@@ -1,5 +1,5 @@
-﻿using Assets.Scripts.Core.Networking;
-using Assets.Scripts.Core.Networking.Udp;
+﻿using Game.Core.Networking;
+using Game.Core.Networking.Udp;
 using NUnit.Framework;
 using System;
 

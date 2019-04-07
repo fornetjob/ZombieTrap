@@ -1,5 +1,5 @@
-﻿using Assets.Scripts.Core.Networking;
-using Assets.Scripts.Core.Networking.Udp;
+﻿using Game.Core.Networking;
+using Game.Core.Networking.Udp;
 
 using ServerApplication.Features.Networkings;
 
@@ -35,6 +35,8 @@ public class ListeningSystem : IFixedExecuteSystem, IDependencyInitialize
             ListeningPort = _settingsService.GetListeningPort(),
             ReceiveInterval = _settingsService.GetReceiveInterval()
         });
+
+        _listener.OnReceive += OnMessageReceive;
     }
 
     #endregion

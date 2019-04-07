@@ -1,5 +1,4 @@
-﻿
-using Assets.Scripts.Core.Networking;
+﻿using Game.Core.Networking;
 
 namespace Assets.Scripts.Features.Client.Networking
 {

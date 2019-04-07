@@ -1,5 +1,5 @@
-﻿using Assets.Scripts.Core;
-using Assets.Scripts.Core.Zombies;
+﻿using Game.Core;
+using Game.Core.Zombies;
 
 using System;
 

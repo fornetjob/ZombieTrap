@@ -5,7 +5,7 @@ using System.Net.Sockets;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Assets.Scripts.Core.Networking.Udp
+namespace Game.Core.Networking.Udp
 {
     public class UdpListener : IListener, IDisposable
     {
@@ -53,6 +53,8 @@ namespace Assets.Scripts.Core.Networking.Udp
                         {
                             IPEndPoint ip = null;
                             byte[] data = listener.Receive(ref ip);
+
+                            System.Console.WriteLine(data.Length);
 
                             var fragment = _serializerService.Deserialize<MessageFragment>(data);
 

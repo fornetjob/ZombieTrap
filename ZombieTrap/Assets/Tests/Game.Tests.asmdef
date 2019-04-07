@@ -1,5 +1,5 @@
 {
-    "name": "Tests",
+    "name": "Game.Tests",
     "references": [
         "Game",
         "Game.Core"
@@ -7,9 +7,7 @@
     "optionalUnityReferences": [
         "TestAssemblies"
     ],
-    "includePlatforms": [
-        "Editor"
-    ],
+    "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
     "overrideReferences": false,

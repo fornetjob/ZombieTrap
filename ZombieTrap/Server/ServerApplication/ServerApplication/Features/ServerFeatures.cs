@@ -1,4 +1,4 @@
-﻿using Assets.Scripts.Core.Dependencies;
+﻿using Game.Core.Dependencies;
 using System.Collections.Generic;
 
 namespace ServerApplication.Features

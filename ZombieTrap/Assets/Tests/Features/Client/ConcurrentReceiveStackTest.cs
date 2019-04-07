@@ -1,4 +1,4 @@
-﻿using Assets.Scripts.Core.Networking;
+﻿using Game.Core.Networking;
 using Assets.Scripts.Features.Client.Networking;
 using NUnit.Framework;
 

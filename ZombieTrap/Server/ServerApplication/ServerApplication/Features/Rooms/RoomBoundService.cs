@@ -1,4 +1,4 @@
-﻿using Assets.Scripts.Core;
+﻿using Game.Core;
 
 public class RoomBoundService:IService, IDependencyInitialize
 {

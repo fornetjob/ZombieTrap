@@ -7,5 +7,5 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 public interface IConnectionStateListener {
-    void OnConnectionState(GameEntity entity, Assets.Scripts.Core.Networking.ConnectionState value, int tryCount);
+    void OnConnectionState(GameEntity entity, Game.Core.Networking.ConnectionState value, int tryCount);
 }
