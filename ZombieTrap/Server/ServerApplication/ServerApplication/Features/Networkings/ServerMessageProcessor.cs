@@ -39,8 +39,6 @@ namespace ServerApplication.Features.Networkings
 
         private void OnConnectMessage(IPEndPoint ip, ConnectMessage msg)
         {
-            System.Console.WriteLine(ip.ToString());
-
             if (_playersPooling.IsExistPlayer(msg.PlayerId) == false)
             {
                 _playerFactory.Create(msg.PlayerId, ip);

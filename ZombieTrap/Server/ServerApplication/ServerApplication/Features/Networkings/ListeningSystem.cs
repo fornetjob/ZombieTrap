@@ -36,6 +36,8 @@ public class ListeningSystem : IFixedExecuteSystem, IDependencyInitialize
             ReceiveInterval = _settingsService.GetReceiveInterval()
         });
 
+        _listener.Open();
+
         _listener.OnReceive += OnMessageReceive;
     }
 

@@ -54,8 +54,6 @@ namespace Game.Core.Networking.Udp
                             IPEndPoint ip = null;
                             byte[] data = listener.Receive(ref ip);
 
-                            System.Console.WriteLine(data.Length);
-
                             var fragment = _serializerService.Deserialize<MessageFragment>(data);
 
                             if (fragment.Index + 1 == fragment.Count)
