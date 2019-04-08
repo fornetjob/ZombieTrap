@@ -15,5 +15,9 @@ namespace Game.Core.Networking.Messages
         public float[] Radiuses;
         [ProtoBuf.ProtoMember(5)]
         public float[] Speeds;
+        [ProtoBuf.ProtoMember(6)]
+        public int[] Healths;
+        [ProtoBuf.ProtoMember(7)]
+        public float[] WaitTo;
     }
 }

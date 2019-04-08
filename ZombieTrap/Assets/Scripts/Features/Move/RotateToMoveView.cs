@@ -8,9 +8,6 @@ namespace Assets.Scripts.Features.Move
         private Transform
             _tr;
 
-        private Vector3
-            _prevDir;
-
         protected override void OnEntityAttach(GameEntity entity)
         {
             _tr = gameObject.transform;
@@ -20,10 +17,7 @@ namespace Assets.Scripts.Features.Move
 
         void IMoveListener.OnMove(GameEntity entity, Vector3 moveDir, Vector3 posTo, float speed)
         {
-            if (_prevDir != moveDir)
-            {
-                _tr.DORotateQuaternion(Quaternion.LookRotation(moveDir), 1f);
-            }
+            _tr.DORotateQuaternion(Quaternion.LookRotation(moveDir), 1f);
         }
     }
 }

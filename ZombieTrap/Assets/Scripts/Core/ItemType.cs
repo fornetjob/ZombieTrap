@@ -2,6 +2,11 @@
 {
     public static class ItemTypeHelper
     {
+        public static bool IsDamagable(this ItemType type)
+        {
+            return IsZombie(type);
+        }
+
         public static bool IsZombie(this ItemType type)
         {
             return type == ItemType.BigZombie

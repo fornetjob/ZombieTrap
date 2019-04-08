@@ -136,6 +136,8 @@ public class ProcessMessagesSystem : IExecuteSystem, IContextInitialize, ITearDo
             case MessageType.Positions:
                 OnPositionMessage(_messageService.ConvertToPositionsMessage(msg));
                 break;
+            case MessageType.Damage:
+                break;
             default:
                 throw new System.NotSupportedException(msg.Type.ToString());
         }
@@ -143,6 +145,7 @@ public class ProcessMessagesSystem : IExecuteSystem, IContextInitialize, ITearDo
 
     private void OnRoomMessage(RoomMessage msg)
     {
+        _gameTimeService.SyncTime(msg.ServerTime);
     }
 
     private void OnItemsMessage(ItemsMessage msg)
@@ -155,7 +158,7 @@ public class ProcessMessagesSystem : IExecuteSystem, IContextInitialize, ITearDo
 
             if (item == null)
             {
-                item = _itemFactory.Create(id, msg.Types[i], msg.Radiuses[i], msg.Speeds[i], msg.Positions[i]);
+                item = _itemFactory.Create(id, msg.Types[i], msg.Radiuses[i], msg.Speeds[i], msg.Positions[i], msg.Healths[i], msg.WaitTo[i]);
             }
         }
     }

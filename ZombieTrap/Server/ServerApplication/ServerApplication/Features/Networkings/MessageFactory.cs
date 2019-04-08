@@ -1,7 +1,9 @@
 ﻿using Game.Core;
 using Game.Core.Networking;
 using Game.Core.Networking.Messages;
+
 using ServerApplication.Features.Items;
+
 using System;
 using System.Collections.Generic;
 
@@ -9,6 +11,7 @@ public class MessageFactory : IDependency
 {
     #region Services
 
+    private TimeService _timeService = null;
     private RoomBoundService _roomBoundService = null;
     private SerializerService _serializerService = null;
 
@@ -62,9 +65,36 @@ public class MessageFactory : IDependency
         CreateItemsMessage(roomId, items);
     }
 
-    public void CreateItemsMessage(Guid roomId, Guid? playerId = null)
+    public void CreateRoomMessage(Guid roomId, Guid playerId)
     {
+        var msg = new RoomMessage
+        {
+            Bound = _roomBoundService.GetRoomBound(),
+            ServerTime = _timeService.GetGameTime()
+        };
+
+        AddMessageToSinglePlayer(playerId, MessageType.Room, _serializerService.Serialize(msg));
+
         CreateItemsMessage(roomId, _itemsPooling.Get(roomId), playerId);
+    }
+
+    public void CreateDamagedMessage(Guid roomId, List<Item> items)
+    {
+        var msg = new DamageMessage
+        {
+            Identities = new ulong[items.Count],
+            Healths = new int[items.Count]
+        };
+
+        for (int i = 0; i < items.Count; i++)
+        {
+            var item = items[i];
+
+            msg.Identities[i] = item.ItemId;
+            msg.Healths[i] = item.Health;
+        }
+
+        AddMessageToAllRoomPlayers(roomId, MessageType.Damage, _serializerService.Serialize(msg));
     }
 
     private void CreateItemsMessage(Guid roomId, List<Item> items, Guid? playerId = null)
@@ -75,7 +105,9 @@ public class MessageFactory : IDependency
             Positions = new Vector2Float[items.Count],
             Radiuses = new float[items.Count],
             Types = new ItemType[items.Count],
-            Speeds = new float[items.Count]
+            Speeds = new float[items.Count],
+            Healths = new int[items.Count],
+            WaitTo = new float[items.Count]
         };
 
         for (int i = 0; i < items.Count; i++)
@@ -87,6 +119,8 @@ public class MessageFactory : IDependency
             msg.Radiuses[i] = item.Radius;
             msg.Types[i] = item.Type;
             msg.Speeds[i] = item.Speed;
+            msg.Healths[i] = item.Health;
+            msg.WaitTo[i] = item.WaitTo;
         }
 
         byte[] data = _serializerService.Serialize(msg);

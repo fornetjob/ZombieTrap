@@ -32,7 +32,7 @@ public class ItemsPooling : IDependency
             _zombiesItems[item.RoomId].Add(item);
         }
 
-        _messageFactory.CreateItemsMessage(item.RoomId);
+        _messageFactory.CreateItemMessage(item.RoomId, item);
     }
 
     public List<Item> Get(Guid roomId)

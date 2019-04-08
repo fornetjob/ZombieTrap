@@ -19,5 +19,7 @@ namespace ServerApplication.Features.Items
         public ItemState State;
 
         public float WaitTo;
+
+        public int Health;
     }
 }

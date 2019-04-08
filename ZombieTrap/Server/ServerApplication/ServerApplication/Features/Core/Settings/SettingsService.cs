@@ -33,6 +33,11 @@ public class SettingsService:IService
         return GetSettingInt("RoomsPerThread");
     }
 
+    public int GetItemHealth(ItemType type)
+    {
+        return GetSettingInt(string.Format("{0}Health", type));
+    }
+
     public float GetItemSpeed(ItemType type)
     {
         return GetSettingFloat(string.Format("{0}Speed", type));

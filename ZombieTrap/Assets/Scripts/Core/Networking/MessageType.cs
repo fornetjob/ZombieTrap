@@ -15,6 +15,7 @@
         Room,
         Items,
         Positions,
+        Damage,
         Reply
     }
 }

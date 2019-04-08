@@ -54,4 +54,14 @@ public class MessageService : IService
 
         return _serializerService.Deserialize<PositionsMessage>(contract.Data);
     }
+
+    public DamageMessage ConvertToDamageMessage(MessageContract contract)
+    {
+        if (contract.Type != MessageType.Damage)
+        {
+            throw new System.ArgumentOutOfRangeException("type");
+        }
+
+        return _serializerService.Deserialize<DamageMessage>(contract.Data);
+    }
 }

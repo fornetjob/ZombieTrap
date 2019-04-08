@@ -16,6 +16,9 @@ namespace ServerApplication
             features.Add(new ZombieSpawnSystem());
             features.Add(new ItemsMoveSystem());
             features.Add(new ItemsSendPositionsSystem());
+            features.Add(new ProjectileSpawnerSystem());
+            features.Add(new ProjectileExplosionSystem());
+
             features.Add(new ListeningSystem());
             features.Add(new SenderSystem());
 
