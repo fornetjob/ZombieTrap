@@ -107,7 +107,8 @@ public class MessageFactory : IDependency
             Identities = new ulong[items.Count],
             Positions = new Vector2Float[items.Count],
             Radiuses = new float[items.Count],
-            Types = new ItemType[items.Count]
+            Types = new ItemType[items.Count],
+            Speeds = new float[items.Count]
         };
 
         for (int i = 0; i < items.Count; i++)
@@ -118,6 +119,7 @@ public class MessageFactory : IDependency
             msg.Positions[i] = item.Pos;
             msg.Radiuses[i] = item.Radius;
             msg.Types[i] = item.Type;
+            msg.Speeds[i] = item.Speed;
         }
 
         return msg;

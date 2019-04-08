@@ -165,13 +165,20 @@ public class ProcessMessagesSystem : IExecuteSystem, IContextInitialize, ITearDo
         for (int i = 0; i < msg.Identities.Length; i++)
         {
             var id = msg.Identities[i];
-            var pos = msg.Positions[i];
 
             var enemy = _context.game.GetEntityWithIdentity(id);
 
             if (enemy != null)
             {
-                enemy.ReplacePosition(new Vector3(pos.x, 0, pos.y));
+                var floatPos = msg.Positions[i];
+                var position = new Vector3(floatPos.x, 0, floatPos.y);
+
+                if (enemy.position.value != position)
+                {
+                    var dir = (enemy.position.value - position).normalized;
+
+                    //enemy.ReplaceMove(dir, position, enemy.item.)
+                }
             }
         }
     }

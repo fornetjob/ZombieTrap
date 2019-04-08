@@ -7,5 +7,6 @@ namespace Assets.Scripts.Features.Zombies
     {
         public ItemType type;
         public float radius;
+        public float speed;
     }
 }

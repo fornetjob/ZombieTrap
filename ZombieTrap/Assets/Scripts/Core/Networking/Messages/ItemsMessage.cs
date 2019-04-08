@@ -13,5 +13,7 @@ namespace Game.Core.Networking.Messages
         public ItemType[] Types;
         [ProtoBuf.ProtoMember(4)]
         public float[] Radiuses;
+        [ProtoBuf.ProtoMember(5)]
+        public float[] Speeds;
     }
 }
