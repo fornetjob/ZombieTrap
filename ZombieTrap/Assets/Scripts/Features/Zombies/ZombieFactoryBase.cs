@@ -1,7 +1,7 @@
 ﻿using Game.Core.Zombies;
 using UnityEngine;
 
-namespace Assets.Scripts.Features.Core.Zombies
+namespace Assets.Scripts.Features.Zombies
 {
     public abstract class ZombieFactoryBase:FactoryBase
     {

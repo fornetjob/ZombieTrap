@@ -57,7 +57,7 @@ public static class GameComponentsLookup {
         typeof(Assets.Scripts.Features.Core.Sprites.SpriteComponent),
         typeof(Assets.Scripts.Features.Core.Sprites.SpriteSizeComponent),
         typeof(Assets.Scripts.Features.Core.Views.ViewComponent),
-        typeof(Assets.Scripts.Features.Core.Zombies.ZombieComponent),
+        typeof(Assets.Scripts.Features.Zombies.ZombieComponent),
         typeof(ConnectionStateListenerComponent),
         typeof(PositionListenerComponent)
     };

@@ -1,7 +1,7 @@
 ﻿using Game.Core.Zombies;
 using Entitas;
 
-namespace Assets.Scripts.Features.Core.Zombies
+namespace Assets.Scripts.Features.Zombies
 {
     public class ZombieComponent : IComponent
     {

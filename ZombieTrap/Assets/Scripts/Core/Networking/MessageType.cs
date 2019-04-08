@@ -4,14 +4,14 @@
     {
         public static bool IsStrongMessage(this MessageType type)
         {
-            return type == MessageType.Connect
-                || type == MessageType.Zombies;
+            return type == MessageType.Zombies;
         }
     }
 
     public enum MessageType
     {
         Connect,
+        Room,
         Zombies,
         Positions,
         Reply
