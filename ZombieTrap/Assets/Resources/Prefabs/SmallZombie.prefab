@@ -27591,6 +27591,8 @@ GameObject:
   - component: {fileID: 4818808316458806}
   - component: {fileID: 95542142654402182}
   - component: {fileID: 4021091332727742910}
+  - component: {fileID: 4560513653669105360}
+  - component: {fileID: 5729778291468996073}
   m_Layer: 11
   m_Name: SmallZombie
   m_TagString: Untagged
@@ -27626,7 +27628,7 @@ Animator:
   m_GameObject: {fileID: 1527468929077054}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: 278bc984c3c331a4abd28e8bf46673cf, type: 3}
-  m_Controller: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: c49b90c2e7fe1394a9be181df71a3f31, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -27645,6 +27647,30 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 097e67a39cc0342439a0cadc7b72621f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &4560513653669105360
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1527468929077054}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e97f8edbe0db682438f33303a20b717c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &5729778291468996073
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1527468929077054}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6244c8f91d57c1542ae0442a75975509, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &1547170140822814

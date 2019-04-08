@@ -6,7 +6,6 @@ namespace ServerApplication.Features.Rooms
     {
         public Guid RoomId;
 
-        public int MaxScore;
         public int MaxPlayerCount;
         public int MaxZombieCount;
 

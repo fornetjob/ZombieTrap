@@ -20,7 +20,7 @@ public class ItemsSendPositionsSystem : IFixedExecuteSystem
         {
             var room = _roomsPooling.Rooms[roomIndex];
 
-            _messageFactory.CreateMessage(room.RoomId, MessageType.Positions);
+            _messageFactory.CreatePositionsMessage(room.RoomId);
         }
     }
 }

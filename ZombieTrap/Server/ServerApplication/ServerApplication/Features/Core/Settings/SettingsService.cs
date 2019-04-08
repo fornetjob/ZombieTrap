@@ -15,9 +15,9 @@ public class SettingsService:IService
     {
         return GetSettingInt("ReceiveInterval");
     }
-    public int GetFixedDeltaTimeMs()
+    public float GetFixedDeltaTime()
     {
-        return GetSettingInt("FixedDeltaTimeMs");
+        return GetSettingFloat("FixedDeltaTime");
     }
     public int GetRoomWidth()
     {
@@ -26,6 +26,11 @@ public class SettingsService:IService
     public int GetRoomHeight()
     {
         return GetSettingInt("RoomHeight");
+    }
+
+    public int GetRoomsPerThread()
+    {
+        return GetSettingInt("RoomsPerThread");
     }
 
     public float GetItemSpeed(ItemType type)

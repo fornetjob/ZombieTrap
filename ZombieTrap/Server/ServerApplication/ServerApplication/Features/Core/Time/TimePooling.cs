@@ -1,7 +1,11 @@
-﻿namespace ServerApplication.Features.Core.Time
+﻿using System;
+
+namespace ServerApplication.Features.Core.Time
 {
     public class TimePooling:IDependency
     {
-        public float Value;
+        public DateTime StartTime;
+        public float Time;
+        public float DeltaTime;
     }
 }

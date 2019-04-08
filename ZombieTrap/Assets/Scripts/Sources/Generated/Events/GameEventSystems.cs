@@ -10,6 +10,7 @@ public sealed class GameEventSystems : Feature {
 
     public GameEventSystems(Contexts contexts) {
         Add(new ConnectionStateEventSystem(contexts)); // priority: 0
+        Add(new MoveEventSystem(contexts)); // priority: 0
         Add(new PositionEventSystem(contexts)); // priority: 0
     }
 }

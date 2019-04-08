@@ -175,7 +175,7 @@ public class ProcessMessagesSystem : IExecuteSystem, IContextInitialize, ITearDo
 
                 if (enemy.position.value != position)
                 {
-                    var dir = (enemy.position.value - position).normalized;
+                    var dir = (position - enemy.position.value).normalized;
 
                     enemy.ReplaceMove(dir, position, enemy.item.speed);
                 }

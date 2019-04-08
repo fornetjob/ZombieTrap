@@ -1,6 +1,7 @@
 ﻿using ServerApplication.Features.Players;
 using System;
 using System.Collections.Generic;
+using System.Net;
 
 public class PlayersPooling:IDependency
 {
@@ -26,6 +27,14 @@ public class PlayersPooling:IDependency
         _players.Add(player);
     }
 
+    public void RemovePlayer(Player player)
+    {
+        _dict.Remove(player.PlayerId);
+        _roomDict[player.RoomId].Remove(player);
+
+        _players.Remove(player);
+    }
+
     public List<Player> GetPlayers()
     {
         return _players;
@@ -36,8 +45,20 @@ public class PlayersPooling:IDependency
         return _dict[playerId];
     }
 
-    public bool IsExistPlayer(Guid playerId)
+    public Player GetPlayer(IPEndPoint endPoint)
     {
-        return _dict.ContainsKey(playerId);
+        var endpointStr = endPoint.ToString();
+
+        for (int i = 0; i < _players.Count; i++)
+        {
+            var player = _players[i];
+
+            if (player.EndPoint.ToString() == endpointStr)
+            {
+                return player;
+            }
+        }
+
+        return null;
     }
 }

@@ -1,12 +1,21 @@
 ﻿using ServerApplication.Features.Core.Time;
+using System;
 
-public class TimeSystem : IFixedExecuteSystem
+public class TimeSystem : IFixedExecuteSystem, IDependencyInitialize
 {
-    private TimeService _timeService = null;
     private TimePooling _timePooling = null;
+
+    void IDependencyInitialize.Initialize()
+    {
+        _timePooling.StartTime = DateTime.Now;
+    }
 
     public void FixedExecute()
     {
-        _timePooling.Value += _timeService.GetFixedDeltaTime();
+        var newTime = (float)((DateTime.Now - _timePooling.StartTime).TotalMilliseconds / 1000f);
+
+        _timePooling.DeltaTime = newTime - _timePooling.Time;
+
+        _timePooling.Time = newTime;
     }
 }

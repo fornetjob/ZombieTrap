@@ -18647,6 +18647,8 @@ GameObject:
   - component: {fileID: 4900006899134096}
   - component: {fileID: 95038859001963370}
   - component: {fileID: 3796497614851309261}
+  - component: {fileID: 6535599536449104240}
+  - component: {fileID: 4771269003357390804}
   m_Layer: 11
   m_Name: BigZombie
   m_TagString: Untagged
@@ -18682,7 +18684,7 @@ Animator:
   m_GameObject: {fileID: 1504716052086658}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: 95ae7538d5bba3b408e45c304eb4df7b, type: 3}
-  m_Controller: {fileID: 0}
+  m_Controller: {fileID: 22100000, guid: f781041cb3ced7b4ebafebd92ff95190, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -18701,6 +18703,30 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 097e67a39cc0342439a0cadc7b72621f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &6535599536449104240
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1504716052086658}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e97f8edbe0db682438f33303a20b717c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &4771269003357390804
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1504716052086658}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6244c8f91d57c1542ae0442a75975509, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &1589112283453586

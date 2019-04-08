@@ -22,9 +22,10 @@ public static class GameComponentsLookup {
     public const int ConnectionState = 11;
     public const int Item = 12;
     public const int ConnectionStateListener = 13;
-    public const int PositionListener = 14;
+    public const int MoveListener = 14;
+    public const int PositionListener = 15;
 
-    public const int TotalComponents = 15;
+    public const int TotalComponents = 16;
 
     public static readonly string[] componentNames = {
         "Board",
@@ -41,6 +42,7 @@ public static class GameComponentsLookup {
         "ConnectionState",
         "Item",
         "ConnectionStateListener",
+        "MoveListener",
         "PositionListener"
     };
 
@@ -59,6 +61,7 @@ public static class GameComponentsLookup {
         typeof(Assets.Scripts.Features.Networking.ConnectionStateComponent),
         typeof(Assets.Scripts.Features.Zombies.ItemComponent),
         typeof(ConnectionStateListenerComponent),
+        typeof(MoveListenerComponent),
         typeof(PositionListenerComponent)
     };
 }

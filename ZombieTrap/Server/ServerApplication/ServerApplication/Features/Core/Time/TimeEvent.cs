@@ -26,7 +26,7 @@ public class TimeEvent
     {
         lock (_lockObj)
         {
-            _timeTo = _timePooling.Value + _secondsInterval;
+            _timeTo = _timePooling.Time + _secondsInterval;
         }
     }
 
@@ -34,7 +34,7 @@ public class TimeEvent
     {
         lock (_lockObj)
         {
-            bool isTimeOver = _timeTo <= _timePooling.Value;
+            bool isTimeOver = _timeTo <= _timePooling.Time;
 
             if (isTimeOver)
             {

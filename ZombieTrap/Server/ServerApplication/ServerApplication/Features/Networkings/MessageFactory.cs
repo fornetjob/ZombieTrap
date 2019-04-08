@@ -1,7 +1,9 @@
 ﻿using Game.Core;
 using Game.Core.Networking;
 using Game.Core.Networking.Messages;
+using ServerApplication.Features.Items;
 using System;
+using System.Collections.Generic;
 
 public class MessageFactory : IDependency
 {
@@ -27,43 +29,7 @@ public class MessageFactory : IDependency
 
     #endregion
 
-    public void CreateMessage(Guid roomId, MessageType type)
-    {
-        byte[] data;
-
-        switch (type)
-        {
-            case MessageType.Positions:
-                data = _serializerService.Serialize(CreatePositionsMessage(roomId));
-                break;
-            case MessageType.Items:
-                data = _serializerService.Serialize(CreateItemsMessage(roomId));
-                break;
-            default:
-                throw new NotSupportedException(type.ToString());
-        }
-
-        var players = _playersPooling.GetRoomPlayers(roomId);
-
-        for (int i = 0; i < players.Count; i++)
-        {
-            var player = players[i];
-
-            AddMessageToPooling(player.PlayerId, type, data);
-        }
-    }
-
-    public void CreateRoomMessage(Guid roomId, Guid playerId)
-    {
-        AddMessageToPooling(playerId, MessageType.Room, _serializerService.Serialize(new RoomMessage
-        {
-            Bound = _roomBoundService.GetRoomBound(),
-        }));
-
-        AddMessageToPooling(playerId, MessageType.Items, _serializerService.Serialize(CreateItemsMessage(roomId)));
-    }
-
-    private PositionsMessage CreatePositionsMessage(Guid roomId)
+    public void CreatePositionsMessage(Guid roomId)
     {
         var items = _itemsPooling.Get(roomId);
 
@@ -81,27 +47,28 @@ public class MessageFactory : IDependency
             posMsg.Positions[i] = item.Pos;
         }
 
-        return posMsg;
+        byte[] data = _serializerService.Serialize(posMsg);
+
+        AddMessageToAllRoomPlayers(roomId, MessageType.Positions, data);
     }
 
-    private void AddMessageToPooling(Guid playerId, MessageType type, byte[] data)
+    public void CreateItemMessage(Guid roomId, Item item)
     {
-        _messageId++;
-
-        var msg = new MessageContract
+        var items = new List<Item>
         {
-            Id = _messageId,
-            Type = type,
-            Data = data
+            item
         };
 
-        _messagePooling.AddMessage(playerId, msg);
+        CreateItemsMessage(roomId, items);
     }
 
-    private ItemsMessage CreateItemsMessage(Guid roomId)
+    public void CreateItemsMessage(Guid roomId, Guid? playerId = null)
     {
-        var items = _itemsPooling.Get(roomId);
+        CreateItemsMessage(roomId, _itemsPooling.Get(roomId), playerId);
+    }
 
+    private void CreateItemsMessage(Guid roomId, List<Item> items, Guid? playerId = null)
+    {
         var msg = new ItemsMessage
         {
             Identities = new ulong[items.Count],
@@ -122,6 +89,41 @@ public class MessageFactory : IDependency
             msg.Speeds[i] = item.Speed;
         }
 
-        return msg;
+        byte[] data = _serializerService.Serialize(msg);
+
+        if (playerId != null)
+        {
+            AddMessageToSinglePlayer(playerId.Value, MessageType.Items, data);
+        }
+        else
+        {
+            AddMessageToAllRoomPlayers(roomId, MessageType.Items, data);
+        }
+    }
+
+    private void AddMessageToAllRoomPlayers(Guid roomId, MessageType type, byte[] data)
+    {
+        var players = _playersPooling.GetRoomPlayers(roomId);
+
+        for (int i = 0; i < players.Count; i++)
+        {
+            var player = players[i];
+
+            AddMessageToSinglePlayer(player.PlayerId, type, data);
+        }
+    }
+
+    private void AddMessageToSinglePlayer(Guid playerId, MessageType type, byte[] data)
+    {
+        _messageId++;
+
+        var msg = new MessageContract
+        {
+            Id = _messageId,
+            Type = type,
+            Data = data
+        };
+
+        _messagePooling.AddMessage(playerId, msg);
     }
 }

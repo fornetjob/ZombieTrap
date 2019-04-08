@@ -14,6 +14,7 @@ public class PlayerFactory : IDependency
         {
             RoomId = roomId,
             PlayerId = playerId,
+            EndPoint = endPoint,
             Sender = new UdpSender(new SendConfiguration
             {
                 EndPoint = endPoint

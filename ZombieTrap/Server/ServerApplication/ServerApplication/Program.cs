@@ -19,13 +19,17 @@ namespace ServerApplication
             features.Add(new ListeningSystem());
             features.Add(new SenderSystem());
 
-            int fixedTimeMs = features.Dependencies.Provide<TimeService>().GetFixedDeltaTimeMs();
+            var fixedTime = features.Dependencies.Provide<SettingsService>().GetFixedDeltaTime();
+
+            var timeService = features.Dependencies.Provide<TimeService>();
 
             while (true)
             {
                 features.FixedExecute();
 
-                Thread.Sleep(fixedTimeMs);
+                var deltaTime = timeService.GetDeltaTime();
+
+                Thread.Sleep(Math.Max(1, Convert.ToInt32((fixedTime - deltaTime) * 1000)));
 
                 if (Console.KeyAvailable)
                 {

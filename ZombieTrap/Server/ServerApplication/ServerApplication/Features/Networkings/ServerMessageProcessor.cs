@@ -54,30 +54,32 @@ namespace ServerApplication.Features.Networkings
             }
         }
 
+        #region Private methods
+
         private void OnConnectMessage(IPEndPoint ip, ConnectMessage msg)
         {
-            Player player;
+            var playerEndPoint = new IPEndPoint(ip.Address, msg.Port.port);
 
-            if (_playersPooling.IsExistPlayer(msg.PlayerId) == false)
+            Player player = _playersPooling.GetPlayer(playerEndPoint);
+
+            if (player != null)
             {
-                var room = _roomsPooling.GetNotFullRoom();
-
-                if (room == null)
-                {
-                    room = _roomFactory.CreateRoom();
-                }
-
-                player = _playerFactory.Create(room.RoomId, msg.PlayerId, new IPEndPoint(ip.Address, msg.Port.port));
-            }
-            else
-            {
-                player = _playersPooling.GetPlayer(msg.PlayerId);
+                _messagePooling.Clear(player.PlayerId);
+                _playersPooling.RemovePlayer(player);
             }
 
-            // Очистим очередь сообщений игрока
-            _messagePooling.Clear(player.PlayerId);
+            var room = _roomsPooling.GetNotFullRoom();
 
-            _messageFactory.CreateRoomMessage(player.RoomId, player.PlayerId);
+            if (room == null)
+            {
+                room = _roomFactory.CreateRoom();
+            }
+
+            player = _playerFactory.Create(room.RoomId, msg.PlayerId, playerEndPoint);
+
+            _messageFactory.CreateItemsMessage(player.RoomId, player.PlayerId);
         }
+
+        #endregion
     }
 }

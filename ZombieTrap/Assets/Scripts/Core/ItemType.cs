@@ -7,13 +7,19 @@
             return type == ItemType.BigZombie
                 || type == ItemType.SmallZombie;
         }
+
+        public static bool IsProjectile(this ItemType type)
+        {
+            return type == ItemType.FireProjectile;
+        }
     }
 
     public enum ItemType
     {
         SmallZombie,
         BigZombie,
+        FireProjectile,
         Lamp,
-        CylinderObtacle
+        CylinderObtacle,
     }
 }
