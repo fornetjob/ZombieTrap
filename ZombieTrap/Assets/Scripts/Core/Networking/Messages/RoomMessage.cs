@@ -8,6 +8,6 @@ namespace Assets.Scripts.Core.Networking.Messages
         [ProtoBuf.ProtoMember(1)]
         public RectangleFloat Bound;
         [ProtoBuf.ProtoMember(2)]
-        public ZombiesMessage Zombies;
+        public ItemsMessage Items;
     }
 }

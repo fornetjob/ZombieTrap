@@ -1,7 +1,7 @@
 ﻿using Game.Core;
-using ServerApplication.Features.Zombies;
+using ServerApplication.Features.Items;
 
-public class ZombiesMoveSystem : IFixedExecuteSystem
+public class ItemsMoveSystem : IFixedExecuteSystem
 {
     #region Services
 
@@ -14,7 +14,7 @@ public class ZombiesMoveSystem : IFixedExecuteSystem
     #region Poolings
 
     private RoomsPooling _roomsPooling = null;
-    private ZombiesPooling _zombiesPooling = null;
+    private ItemsPooling _itemsPooling = null;
 
     #endregion
 
@@ -26,7 +26,7 @@ public class ZombiesMoveSystem : IFixedExecuteSystem
         {
             var room = _roomsPooling.Rooms[roomIndex];
 
-            var zombies = _zombiesPooling.GetZombies(room.RoomId);
+            var zombies = _itemsPooling.Get(room.RoomId);
 
             for (int zombieIndex = 0; zombieIndex < zombies.Count; zombieIndex++)
             {
@@ -34,37 +34,40 @@ public class ZombiesMoveSystem : IFixedExecuteSystem
 
                 var pos = zombie.Pos;
 
-                switch (zombie.State)
+                if (zombie.Speed > Vector2Float.kEpsilon)
                 {
-                    case ZombieState.Move:
-                        pos = Vector2Float.MoveTowards(pos, zombie.MoveToPos, time * zombie.Speed);
+                    switch (zombie.State)
+                    {
+                        case ItemState.Move:
+                            pos = Vector2Float.MoveTowards(pos, zombie.MoveToPos, time * zombie.Speed);
 
-                        if (Vector2Float.Distance(pos, zombie.MoveToPos) <= Vector2Float.kEpsilon)
-                        {
-                            pos = zombie.MoveToPos;
+                            if (Vector2Float.Distance(pos, zombie.MoveToPos) <= Vector2Float.kEpsilon)
+                            {
+                                pos = zombie.MoveToPos;
 
-                            EndMove(zombie);
-                        }
-                        break;
-                    case ZombieState.Wait:
-                        if (zombie.WaitTo < _timeService.GetGameTime())
-                        {
-                            var roomBound = _roomBoundService.GetBound(zombie.Radius);
+                                EndMove(zombie);
+                            }
+                            break;
+                        case ItemState.Wait:
+                            if (zombie.WaitTo < _timeService.GetGameTime())
+                            {
+                                var roomBound = _roomBoundService.GetRadiusBound(zombie.Radius);
 
-                            var dir = _randomService.RandomDir();
+                                var dir = _randomService.RandomDir();
 
-                            var moveToPos = zombie.Pos + dir * roomBound.size.x;
+                                var moveToPos = zombie.Pos + dir * roomBound.size.x;
 
-                            moveToPos = roomBound.ClosestPoint(moveToPos);
+                                moveToPos = roomBound.ClosestPoint(moveToPos);
 
-                            dir = (zombie.Pos - moveToPos).normalized;
+                                dir = (zombie.Pos - moveToPos).normalized;
 
-                            zombie.MoveToPos = moveToPos;
-                            zombie.State = ZombieState.Move;
+                                zombie.MoveToPos = moveToPos;
+                                zombie.State = ItemState.Move;
 
-                            continue;
-                        }
-                        break;
+                                continue;
+                            }
+                            break;
+                    }
                 }
 
                 bool isIntersect = false;
@@ -97,11 +100,11 @@ public class ZombiesMoveSystem : IFixedExecuteSystem
         }
     }
 
-    private void EndMove(Zombie zombie)
+    private void EndMove(Item zombie)
     {
-        if (zombie.State == ZombieState.Move)
+        if (zombie.State == ItemState.Move)
         {
-            zombie.State = ZombieState.Wait;
+            zombie.State = ItemState.Wait;
             zombie.WaitTo = _timeService.GetGameTime() + _randomService.Range(0.3f, 1f);
         }
     }

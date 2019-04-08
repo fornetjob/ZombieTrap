@@ -1,15 +1,14 @@
 ﻿using Game.Core;
-using Game.Core.Zombies;
 using System;
 
-namespace ServerApplication.Features.Zombies
+namespace ServerApplication.Features.Items
 {
-    public class Zombie
+    public class Item
     {
-        public uint ZombieId;
+        public uint ItemId;
         public Guid RoomId;
 
-        public ZombieType Type;
+        public ItemType Type;
 
         public float Radius;
         public Vector2Float Pos;
@@ -17,7 +16,7 @@ namespace ServerApplication.Features.Zombies
         public float Speed;
         public Vector2Float MoveToPos;
 
-        public ZombieState State;
+        public ItemState State;
 
         public float WaitTo;
     }

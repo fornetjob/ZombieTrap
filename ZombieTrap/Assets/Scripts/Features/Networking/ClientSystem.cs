@@ -11,7 +11,6 @@ public class ClientSystem : IExecuteSystem, IContextInitialize, ITearDownSystem
     #region Services
 
     private GameTimeService _gameTimeService = null;
-    private SerializerService _serializerService = null;
     private ClientMessageProcessor _messageProcessor = null;
 
     #endregion

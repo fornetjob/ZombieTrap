@@ -1,4 +1,4 @@
-﻿using Game.Core.Zombies;
+﻿using Game.Core;
 
 using System;
 using System.Configuration;
@@ -28,14 +28,14 @@ public class SettingsService:IService
         return GetSettingInt("RoomHeight");
     }
 
-    public float GetZombieSpeed(ZombieType type)
+    public float GetItemSpeed(ItemType type)
     {
-        return GetSettingFloat(string.Format("{0}ZombieSpeed", type));
+        return GetSettingFloat(string.Format("{0}Speed", type));
     }
 
-    public float GetZombieRadius(ZombieType type)
+    public float GetItemRadius(ItemType type)
     {
-        return GetSettingFloat(string.Format("{0}ZombieRadius", type));
+        return GetSettingFloat(string.Format("{0}Radius", type));
     }
 
     #endregion

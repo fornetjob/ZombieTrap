@@ -1,11 +1,11 @@
-﻿using Game.Core.Zombies;
+﻿using Game.Core;
 using Entitas;
 
 namespace Assets.Scripts.Features.Zombies
 {
     public class ZombieComponent : IComponent
     {
-        public ZombieType type;
+        public ItemType type;
         public float radius;
     }
 }

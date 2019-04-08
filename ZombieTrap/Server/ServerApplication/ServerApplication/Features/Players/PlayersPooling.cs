@@ -21,6 +21,11 @@ public class PlayersPooling:IDependency
         return _players;
     }
 
+    public Player GetPlayer(Guid playerId)
+    {
+        return _dict[playerId];
+    }
+
     public bool IsExistPlayer(Guid playerId)
     {
         return _dict.ContainsKey(playerId);

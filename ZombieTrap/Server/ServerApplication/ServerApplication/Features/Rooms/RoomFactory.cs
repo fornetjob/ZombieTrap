@@ -1,8 +1,21 @@
-﻿using ServerApplication.Features.Rooms;
+﻿using Game.Core;
+using ServerApplication.Features.Rooms;
 using System;
 
 public class RoomFactory : IDependency
 {
+    #region Services
+
+    private SettingsService _settingsService = null;
+
+    #endregion
+
+    #region Factories
+
+    private ItemFactory _itemFactory = null;
+
+    #endregion
+
     #region Poolings
 
     private TimeService _timeService = null;
@@ -26,6 +39,10 @@ public class RoomFactory : IDependency
 #if DEBUG
         System.Console.WriteLine("Created room {0}", room.RoomId);
 #endif
+
+        var lampRadius = _settingsService.GetItemRadius(ItemType.Lamp);
+
+        _itemFactory.Create(room.RoomId, ItemType.Lamp, lampRadius, Vector2Float.zero);
 
         return room;
     }

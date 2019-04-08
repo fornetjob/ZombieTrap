@@ -1,5 +1,4 @@
 ﻿using Game.Core;
-using Game.Core.Zombies;
 
 using System;
 
@@ -15,13 +14,13 @@ public class ZombieSpawnSystem : IFixedExecuteSystem
 
     #region Factories
 
-    private ZombieFactory _zombieFactory = null;
+    private ItemFactory _itemFactory = null;
 
     #endregion
 
     #region Poolings
 
-    private ZombiesPooling _zombiesPooling = null;
+    private ItemsPooling _itemsPooling = null;
     private RoomsPooling _roomsPooling = null;
     
     #endregion
@@ -33,18 +32,18 @@ public class ZombieSpawnSystem : IFixedExecuteSystem
             var room = _roomsPooling.Rooms[i];
 
             if (room.SpawnTimeEvent.Check()
-                && _zombiesPooling.GetCount(room.RoomId) < room.MaxZombieCount)
+                && _itemsPooling.GetCount(room.RoomId) < room.MaxZombieCount)
             {
-                ZombieType type = (ZombieType)_randomService.Range(0, 3);
-                float radius = _settingsService.GetZombieRadius(type);
+                ItemType type = _randomService.GetRandomZombie();
 
-                var spawnBound = _roomBoundService.GetBound(radius);
+                float radius = _settingsService.GetItemRadius(type);
+                var spawnBound = _roomBoundService.GetRadiusBound(radius);
 
                 var pos = _randomService.RandomPos(spawnBound);
 
                 if (IsZombieIntersect(room.RoomId, pos, radius) == false)
                 {
-                    _zombieFactory.Create(room.RoomId, type, radius, pos);
+                    _itemFactory.Create(room.RoomId, type, radius, pos);
                 }
             }
         }
@@ -52,7 +51,7 @@ public class ZombieSpawnSystem : IFixedExecuteSystem
 
     private bool IsZombieIntersect(Guid roomId, Vector2Float pos, float radius)
     {
-        var zombies = _zombiesPooling.GetZombies(roomId);
+        var zombies = _itemsPooling.Get(roomId);
 
         for (int i = 0; i < zombies.Count; i++)
         {

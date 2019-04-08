@@ -26,4 +26,24 @@ public class RandomService:IService
     {
         return new Vector2Float(Range(bound.min.x, bound.max.x), Range(bound.min.y, bound.max.y));
     }
+
+    public ItemType GetRandomZombie()
+    {
+        ItemType item;
+
+        switch (Range(0, 3))
+        {
+            case 0:
+                item = ItemType.SmallZombie;
+                break;
+            case 1:
+                item = ItemType.MediumZombie;
+                break;
+            default:
+                item = ItemType.BigZombie;
+                break;
+        }
+
+        return item;
+    }
 }
