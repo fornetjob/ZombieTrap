@@ -84,13 +84,18 @@ public class ItemsMoveSystem : IFixedExecuteSystem
 
                     var distBetweenItems = Vector2Float.Distance(pos, otherItem.Pos);
 
-                    if (distBetweenItems < item.Radius + otherItem.Radius)
+                    var distLack = distBetweenItems - item.Radius - otherItem.Radius;
+
+                    if (distLack < 0)
                     {
-                        var distLack = distBetweenItems - item.Radius - otherItem.Radius;
+                        distLack -= Vector2Float.kEpsilon;
 
-                        otherItem.Pos = otherItem.Pos + (pos - otherItem.Pos).normalized * distLack;
+                        if (otherItem.Speed > Vector2Float.kEpsilon)
+                        {
+                            otherItem.Pos = otherItem.Pos + (pos - otherItem.Pos).normalized * distLack;
 
-                        EndMove(otherItem);
+                            EndMove(otherItem);
+                        }
 
                         isIntersect = true;
                     }

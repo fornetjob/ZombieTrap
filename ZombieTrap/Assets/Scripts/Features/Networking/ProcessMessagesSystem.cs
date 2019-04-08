@@ -5,19 +5,22 @@ using Entitas;
 
 using System.Net;
 using Assets.Scripts.Features.Networking;
+using Game.Core.Networking.Messages;
+using UnityEngine;
 
 public class ProcessMessagesSystem : IExecuteSystem, IContextInitialize, ITearDownSystem
 {
     #region Services
 
     private GameTimeService _gameTimeService = null;
-    private ClientMessageProcessor _messageProcessor = null;
     private NetworkSettingsService _networkSettingsService = null;
+    private MessageService _messageService = null;
 
     #endregion
 
     #region Factories
 
+    private ItemFactory _itemFactory = null;
     private MessageFactory _messageFactory = null;
 
     #endregion
@@ -31,6 +34,9 @@ public class ProcessMessagesSystem : IExecuteSystem, IContextInitialize, ITearDo
 
     #region Fields
 
+    private Contexts
+        _context;
+
     private IListener
         _listener;
 
@@ -39,13 +45,15 @@ public class ProcessMessagesSystem : IExecuteSystem, IContextInitialize, ITearDo
 
     private GameTimeEvent
         _connectionTimeEvent;
-    
+
     #endregion
 
     #region IContextInitialize
 
     void IContextInitialize.Initialize(Contexts context)
     {
+        _context = context;
+
         _stateEntity = context.game.connectionStateEntity;
 
         _connectionTimeEvent = _gameTimeService.CreateTimeEvent(1);
@@ -55,6 +63,17 @@ public class ProcessMessagesSystem : IExecuteSystem, IContextInitialize, ITearDo
         _listener.OnReceive += OnMessageReceive;
 
         _listener.Open();
+    }
+
+    #endregion
+
+    #region ITearDownSystem
+
+    void ITearDownSystem.TearDown()
+    {
+        _listener.Close();
+
+        _stateEntity.ReplaceConnectionState(ConnectionState.Closed, 0);
     }
 
     #endregion
@@ -97,18 +116,64 @@ public class ProcessMessagesSystem : IExecuteSystem, IContextInitialize, ITearDo
 
             if (_listenMessagePoolings.TryDequeueMessage(out msg))
             {
-                _messageProcessor.Process(msg);
+                Process(msg);
             }
         }
     }
 
-    #region ITearDownSystem
+    #region Private methods
 
-    void ITearDownSystem.TearDown()
+    private void Process(MessageContract msg)
     {
-        _listener.Close();
+        switch (msg.Type)
+        {
+            case MessageType.Room:
+                OnRoomMessage(_messageService.ConvertToRoomMessage(msg));
+                break;
+            case MessageType.Items:
+                OnItemsMessage(_messageService.ConvertToItemsMessage(msg));
+                break;
+            case MessageType.Positions:
+                OnPositionMessage(_messageService.ConvertToPositionsMessage(msg));
+                break;
+            default:
+                throw new System.NotSupportedException(msg.Type.ToString());
+        }
+    }
 
-        _stateEntity.ReplaceConnectionState(ConnectionState.Closed, 0);
+    private void OnRoomMessage(RoomMessage msg)
+    {
+    }
+
+    private void OnItemsMessage(ItemsMessage msg)
+    {
+        for (int i = 0; i < msg.Identities.Length; i++)
+        {
+            var id = msg.Identities[i];
+
+            var item = _context.game.GetEntityWithIdentity(id);
+
+            if (item == null)
+            {
+                item = _itemFactory.Create(id, msg.Types[i], msg.Radiuses[i], msg.Positions[i]);
+            }
+        }
+    }
+
+    private void OnPositionMessage(PositionsMessage msg)
+    {
+        for (int i = 0; i < msg.Identities.Length; i++)
+        {
+            var id = msg.Identities[i];
+            var pos = msg.Positions[i];
+
+            var enemy = _context.game.GetEntityWithIdentity(id);
+
+            if (enemy != null)
+            {
+                enemy.ReplacePosition(new Vector3(pos.x, 0, pos.y));
+            }
+        }
     }
 
     #endregion
