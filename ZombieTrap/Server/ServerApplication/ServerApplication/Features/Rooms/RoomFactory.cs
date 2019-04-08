@@ -48,8 +48,7 @@ public class RoomFactory : IDependency
         _itemFactory.Create(room.RoomId, ItemType.Lamp, lampRadius, new Vector2Float(-5.5f, 4.5f));
         _itemFactory.Create(room.RoomId, ItemType.Lamp, lampRadius, new Vector2Float(5.5f, 4.5f));
 
-        _itemFactory.Create(room.RoomId, ItemType.Lamp, lampRadius, new Vector2Float(-1.5f, 4.5f));
-        _itemFactory.Create(room.RoomId, ItemType.Lamp, lampRadius, new Vector2Float(1.5f, 4.5f));
+        _itemFactory.Create(room.RoomId, ItemType.CylinderObtacle, _settingsService.GetItemRadius(ItemType.CylinderObtacle), new Vector2Float(0, 2f));
 
         return room;
     }

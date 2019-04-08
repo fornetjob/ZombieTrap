@@ -155,7 +155,7 @@ public class ProcessMessagesSystem : IExecuteSystem, IContextInitialize, ITearDo
 
             if (item == null)
             {
-                item = _itemFactory.Create(id, msg.Types[i], msg.Radiuses[i], msg.Positions[i]);
+                item = _itemFactory.Create(id, msg.Types[i], msg.Radiuses[i], msg.Speeds[i], msg.Positions[i]);
             }
         }
     }
@@ -177,7 +177,7 @@ public class ProcessMessagesSystem : IExecuteSystem, IContextInitialize, ITearDo
                 {
                     var dir = (enemy.position.value - position).normalized;
 
-                    //enemy.ReplaceMove(dir, position, enemy.item.)
+                    enemy.ReplaceMove(dir, position, enemy.item.speed);
                 }
             }
         }

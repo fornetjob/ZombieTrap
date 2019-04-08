@@ -13,6 +13,7 @@
     {
         SmallZombie,
         BigZombie,
-        Lamp
+        Lamp,
+        CylinderObtacle
     }
 }

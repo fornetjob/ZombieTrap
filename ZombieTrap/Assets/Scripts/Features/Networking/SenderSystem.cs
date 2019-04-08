@@ -52,6 +52,8 @@ public class ServerConnectionSystem : IExecuteSystem, IContextInitialize, ITearD
         _sender = new UdpSender(_networkSettingsService.GetSenderConfiguration());
 
         _sender.Open();
+
+        _messageFactory.CreateConnectMessage();
     }
 
     #endregion
