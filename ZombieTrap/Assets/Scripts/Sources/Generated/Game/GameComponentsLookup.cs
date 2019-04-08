@@ -8,18 +8,18 @@
 //------------------------------------------------------------------------------
 public static class GameComponentsLookup {
 
-    public const int ConnectionState = 0;
-    public const int Board = 1;
-    public const int Bound = 2;
-    public const int Destroy = 3;
-    public const int GameTime = 4;
-    public const int WaitTime = 5;
-    public const int Identity = 6;
-    public const int Move = 7;
-    public const int Position = 8;
-    public const int Sprite = 9;
-    public const int SpriteSize = 10;
-    public const int View = 11;
+    public const int Board = 0;
+    public const int Bound = 1;
+    public const int Destroy = 2;
+    public const int GameTime = 3;
+    public const int WaitTime = 4;
+    public const int Identity = 5;
+    public const int Position = 6;
+    public const int Sprite = 7;
+    public const int SpriteSize = 8;
+    public const int View = 9;
+    public const int Move = 10;
+    public const int ConnectionState = 11;
     public const int Zombie = 12;
     public const int ConnectionStateListener = 13;
     public const int PositionListener = 14;
@@ -27,36 +27,36 @@ public static class GameComponentsLookup {
     public const int TotalComponents = 15;
 
     public static readonly string[] componentNames = {
-        "ConnectionState",
         "Board",
         "Bound",
         "Destroy",
         "GameTime",
         "WaitTime",
         "Identity",
-        "Move",
         "Position",
         "Sprite",
         "SpriteSize",
         "View",
+        "Move",
+        "ConnectionState",
         "Zombie",
         "ConnectionStateListener",
         "PositionListener"
     };
 
     public static readonly System.Type[] componentTypes = {
-        typeof(Assets.Scripts.Features.Networking.ConnectionStateComponent),
         typeof(Assets.Scripts.Features.Core.Board.BoardComponent),
         typeof(Assets.Scripts.Features.Core.Bound.BoundComponent),
         typeof(Assets.Scripts.Features.Core.Destroy.DestroyComponent),
         typeof(Assets.Scripts.Features.Core.GameTime.GameTimeComponent),
         typeof(Assets.Scripts.Features.Core.GameTime.WaitTimeComponent),
         typeof(Assets.Scripts.Features.Core.Identity.IdentityComponent),
-        typeof(Assets.Scripts.Features.Core.Move.MoveComponent),
         typeof(Assets.Scripts.Features.Core.Position.PositionComponent),
         typeof(Assets.Scripts.Features.Core.Sprites.SpriteComponent),
         typeof(Assets.Scripts.Features.Core.Sprites.SpriteSizeComponent),
         typeof(Assets.Scripts.Features.Core.Views.ViewComponent),
+        typeof(Assets.Scripts.Features.Move.MoveComponent),
+        typeof(Assets.Scripts.Features.Networking.ConnectionStateComponent),
         typeof(Assets.Scripts.Features.Zombies.ZombieComponent),
         typeof(ConnectionStateListenerComponent),
         typeof(PositionListenerComponent)
