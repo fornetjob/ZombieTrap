@@ -31,13 +31,10 @@ public class RandomService:IService
     {
         ItemType item;
 
-        switch (Range(0, 3))
+        switch (Range(0, 2))
         {
             case 0:
                 item = ItemType.SmallZombie;
-                break;
-            case 1:
-                item = ItemType.MediumZombie;
                 break;
             default:
                 item = ItemType.BigZombie;

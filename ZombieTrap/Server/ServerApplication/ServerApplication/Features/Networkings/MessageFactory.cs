@@ -40,7 +40,7 @@ namespace ServerApplication.Features.Networkings
                 case MessageType.Room:
                     data = _serializerService.Serialize(CreateRoomMessage(playerId));
                     break;
-                case MessageType.Zombies:
+                case MessageType.Items:
                     data = _serializerService.Serialize(CreateItemsMessage(playerId));
                     break;
                 default:

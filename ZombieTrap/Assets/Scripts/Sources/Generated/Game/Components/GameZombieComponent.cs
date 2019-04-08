@@ -8,12 +8,12 @@
 //------------------------------------------------------------------------------
 public partial class GameEntity {
 
-    public Assets.Scripts.Features.Zombies.ZombieComponent zombie { get { return (Assets.Scripts.Features.Zombies.ZombieComponent)GetComponent(GameComponentsLookup.Zombie); } }
+    public Assets.Scripts.Features.Zombies.ItemComponent zombie { get { return (Assets.Scripts.Features.Zombies.ItemComponent)GetComponent(GameComponentsLookup.Zombie); } }
     public bool hasZombie { get { return HasComponent(GameComponentsLookup.Zombie); } }
 
     public void AddZombie(Game.Core.ItemType newType, float newRadius) {
         var index = GameComponentsLookup.Zombie;
-        var component = (Assets.Scripts.Features.Zombies.ZombieComponent)CreateComponent(index, typeof(Assets.Scripts.Features.Zombies.ZombieComponent));
+        var component = (Assets.Scripts.Features.Zombies.ItemComponent)CreateComponent(index, typeof(Assets.Scripts.Features.Zombies.ItemComponent));
         component.type = newType;
         component.radius = newRadius;
         AddComponent(index, component);
@@ -21,7 +21,7 @@ public partial class GameEntity {
 
     public void ReplaceZombie(Game.Core.ItemType newType, float newRadius) {
         var index = GameComponentsLookup.Zombie;
-        var component = (Assets.Scripts.Features.Zombies.ZombieComponent)CreateComponent(index, typeof(Assets.Scripts.Features.Zombies.ZombieComponent));
+        var component = (Assets.Scripts.Features.Zombies.ItemComponent)CreateComponent(index, typeof(Assets.Scripts.Features.Zombies.ItemComponent));
         component.type = newType;
         component.radius = newRadius;
         ReplaceComponent(index, component);

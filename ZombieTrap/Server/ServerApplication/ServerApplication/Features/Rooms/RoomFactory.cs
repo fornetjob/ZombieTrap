@@ -42,7 +42,14 @@ public class RoomFactory : IDependency
 
         var lampRadius = _settingsService.GetItemRadius(ItemType.Lamp);
 
-        _itemFactory.Create(room.RoomId, ItemType.Lamp, lampRadius, Vector2Float.zero);
+        _itemFactory.Create(room.RoomId, ItemType.Lamp, lampRadius, new Vector2Float(-9.5f, 4.5f));
+        _itemFactory.Create(room.RoomId, ItemType.Lamp, lampRadius, new Vector2Float(9.5f, 4.5f));
+
+        _itemFactory.Create(room.RoomId, ItemType.Lamp, lampRadius, new Vector2Float(-5.5f, 4.5f));
+        _itemFactory.Create(room.RoomId, ItemType.Lamp, lampRadius, new Vector2Float(5.5f, 4.5f));
+
+        _itemFactory.Create(room.RoomId, ItemType.Lamp, lampRadius, new Vector2Float(-1.5f, 4.5f));
+        _itemFactory.Create(room.RoomId, ItemType.Lamp, lampRadius, new Vector2Float(1.5f, 4.5f));
 
         return room;
     }

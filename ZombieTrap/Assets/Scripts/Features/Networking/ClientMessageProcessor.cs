@@ -1,5 +1,6 @@
 ﻿using Game.Core.Networking;
 using Game.Core.Networking.Messages;
+using UnityEngine;
 
 namespace Assets.Scripts.Features.Networking
 {
@@ -8,6 +9,12 @@ namespace Assets.Scripts.Features.Networking
         #region Services
 
         private MessageService _messageService = null;
+
+        #endregion
+
+        #region Factories
+
+        private ItemFactory _itemFactory = null;
 
         #endregion
 
@@ -33,8 +40,11 @@ namespace Assets.Scripts.Features.Networking
         {
             switch (msg.Type)
             {
-                case MessageType.Zombies:
-
+                case MessageType.Room:
+                    OnRoomMessage(_messageService.ConvertToRoomMessage(msg));
+                    break;
+                case MessageType.Items:
+                    OnItemsMessage(_messageService.ConvertToItemsMessage(msg));
                     break;
                 case MessageType.Positions:
                     OnPositionMessage(_messageService.ConvertToPositionsMessage(msg));
@@ -48,6 +58,28 @@ namespace Assets.Scripts.Features.Networking
 
         #region Private methods
 
+        private void OnRoomMessage(RoomMessage msg)
+        {
+            OnItemsMessage(msg.Items);
+        }
+
+        private void OnItemsMessage(ItemsMessage msg)
+        {
+            for (int i = 0; i < msg.PositionsMessage.Identities.Length; i++)
+            {
+                var id = msg.PositionsMessage.Identities[i];
+
+                var item = _context.game.GetEntityWithIdentity(id);
+
+                if (item == null)
+                {
+                    item = _itemFactory.Create(id, msg.Types[i], msg.Radiuses[i]);
+                }
+            }
+
+            OnPositionMessage(msg.PositionsMessage);
+        }
+
         private void OnPositionMessage(PositionsMessage msg)
         {
             for (int i = 0; i < msg.Identities.Length; i++)
@@ -59,7 +91,7 @@ namespace Assets.Scripts.Features.Networking
 
                 if (enemy != null)
                 {
-                    enemy.ReplacePosition(new UnityEngine.Vector3(pos.x, pos.y));
+                    enemy.ReplacePosition(new Vector3(pos.x, 0, pos.y));
                 }
             }
         }

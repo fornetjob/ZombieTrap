@@ -1,6 +1,6 @@
 ﻿using Game.Core;
 
-namespace Assets.Scripts.Core.Networking.Messages
+namespace Game.Core.Networking.Messages
 {
     [ProtoBuf.ProtoContract]
     public class RoomMessage

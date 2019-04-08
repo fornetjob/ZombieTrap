@@ -4,7 +4,8 @@
     {
         public static bool IsStrongMessage(this MessageType type)
         {
-            return type == MessageType.Zombies;
+            return type == MessageType.Room
+                || type == MessageType.Items;
         }
     }
 
@@ -12,7 +13,7 @@
     {
         Connect,
         Room,
-        Zombies,
+        Items,
         Positions,
         Reply
     }
