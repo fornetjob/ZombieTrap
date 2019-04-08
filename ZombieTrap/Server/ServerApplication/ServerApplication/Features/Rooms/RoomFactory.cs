@@ -30,7 +30,7 @@ public class RoomFactory : IDependency
             RoomId = Guid.NewGuid(),
             MaxScore = 1000,
             MaxZombieCount = 20,
-            PlayerCount = 4,
+            MaxPlayerCount = 4,
             SpawnTimeEvent = _timeService.CreateTimeEvent(0.3f)
         };
 

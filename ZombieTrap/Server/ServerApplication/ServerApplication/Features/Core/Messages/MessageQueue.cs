@@ -25,6 +25,14 @@ namespace ServerApplication.Features.Core.Messages
 
         #region Public methods
 
+        public void Clear()
+        {
+            lock (_lockObj)
+            {
+                _messages.Clear();
+            }
+        }
+
         public void Enqueue(MessageContract msg)
         {
             lock (_lockObj)

@@ -7,7 +7,7 @@ namespace ServerApplication.Features.Rooms
         public Guid RoomId;
 
         public int MaxScore;
-        public int PlayerCount;
+        public int MaxPlayerCount;
         public int MaxZombieCount;
 
         public TimeEvent SpawnTimeEvent;

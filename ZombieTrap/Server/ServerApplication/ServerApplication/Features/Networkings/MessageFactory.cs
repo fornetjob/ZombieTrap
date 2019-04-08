@@ -1,5 +1,8 @@
 ﻿using Assets.Scripts.Core.Networking.Messages;
+
+using Game.Core;
 using Game.Core.Networking;
+
 using System;
 
 namespace ServerApplication.Features.Networkings
@@ -71,7 +74,27 @@ namespace ServerApplication.Features.Networkings
         {
             var player = _playersPooling.GetPlayer(playerId);
 
-            return null;
+            var items = _itemsPooling.Get(player.RoomId);
+
+            var msg = new ItemsMessage
+            {
+                Ids = new ulong[items.Count],
+                Poses = new Vector2Float[items.Count],
+                Radiuses = new float[items.Count],
+                Types = new ItemType[items.Count]
+            };
+
+            for (int i = 0; i < items.Count; i++)
+            {
+                var item = items[i];
+
+                msg.Ids[i] = item.ItemId;
+                msg.Poses[i] = item.Pos;
+                msg.Radiuses[i] = item.Radius;
+                msg.Types[i] = item.Type;
+            }
+
+            return msg;
         }
     }
 }

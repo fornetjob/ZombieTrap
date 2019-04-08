@@ -28,6 +28,12 @@ public class MessagePooling : IDependency
         }
     }
 
+    public void Clear(Guid playerId)
+    {
+        GetMessageQueue(playerId).Clear();
+        GetStrongMessageQueue(playerId).Clear();
+    }
+
     public MessageQueue GetMessageQueue(Guid playerId)
     {
         return _messageDict[playerId];

@@ -1,6 +1,7 @@
 ﻿using Game.Core.Networking;
 using Game.Core.Networking.Messages;
-
+using ServerApplication.Features.Players;
+using ServerApplication.Features.Rooms;
 using System.Net;
 
 namespace ServerApplication.Features.Networkings
@@ -15,13 +16,17 @@ namespace ServerApplication.Features.Networkings
 
         #region Poolings
 
+        private RoomsPooling _roomsPooling = null;
         private PlayersPooling _playersPooling = null;
+        private MessagePooling _messagePooling = null;
 
         #endregion
 
         #region Factories
 
+        private MessageFactory _messageFactory = null;
         private PlayerFactory _playerFactory = null;
+        private RoomFactory _roomFactory = null;
 
         #endregion
 
@@ -41,8 +46,20 @@ namespace ServerApplication.Features.Networkings
         {
             if (_playersPooling.IsExistPlayer(msg.PlayerId) == false)
             {
-                _playerFactory.Create(msg.PlayerId, ip);
+                var room = _roomsPooling.GetNotFullRoom();
+
+                if (room == null)
+                {
+                    room = _roomFactory.CreateRoom();
+                }
+
+                _playerFactory.Create(room.RoomId, msg.PlayerId, ip);
             }
+
+            // Очистим очередь сообщений игрока
+            _messagePooling.Clear(msg.PlayerId);
+
+            _messageFactory.CreateMessage(msg.PlayerId, MessageType.Room);
         }
     }
 }

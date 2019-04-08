@@ -8,10 +8,11 @@ public class PlayerFactory : IDependency
 {
     private PlayersPooling _playersPooling = null;
 
-    public Player Create(Guid playerId, IPEndPoint endPoint)
+    public Player Create(Guid roomId, Guid playerId, IPEndPoint endPoint)
     {
         var player = new Player
         {
+            RoomId = roomId,
             PlayerId = playerId,
             Sender = new UdpSender(new SendConfiguration
             {

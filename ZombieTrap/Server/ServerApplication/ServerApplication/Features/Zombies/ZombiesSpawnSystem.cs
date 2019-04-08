@@ -32,7 +32,7 @@ public class ZombieSpawnSystem : IFixedExecuteSystem
             var room = _roomsPooling.Rooms[i];
 
             if (room.SpawnTimeEvent.Check()
-                && _itemsPooling.GetCount(room.RoomId) < room.MaxZombieCount)
+                && _itemsPooling.GetZombies(room.RoomId).Count < room.MaxZombieCount)
             {
                 ItemType type = _randomService.GetRandomZombie();
 

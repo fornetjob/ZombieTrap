@@ -12,6 +12,6 @@ namespace Assets.Scripts.Core.Networking.Messages
         [ProtoBuf.ProtoMember(3)]
         public float[] Radiuses;
         [ProtoBuf.ProtoMember(4)]
-        public Vector2Float Poses;
+        public Vector2Float[] Poses;
     }
 }

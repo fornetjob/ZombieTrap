@@ -32,8 +32,6 @@ public class NetworkingTest
 
                 serverListener.OnReceive += (endpoint, message) =>
                 {
-                    UnityEngine.Debug.Log(message.Type);
-
                     Assert.AreEqual(message.Type, MessageType.Connect);
 
                     isConnected = true;
