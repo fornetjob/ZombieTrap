@@ -1,10 +1,8 @@
 ﻿using Assets.Scripts.EntitasExtensions;
-using Assets.Scripts.Features.Core.GameTime;
-using Assets.Scripts.Features.Core.Move;
-using Assets.Scripts.Features.Core.Views;
-using Assets.Scripts.Features.Core.Zombies;
+
 using Entitas;
 using Entitas.CodeGeneration.Attributes;
+
 using System.Collections.Generic;
 
 public partial class Contexts
@@ -36,10 +34,6 @@ namespace Assets.Scripts.EntitasExtensions
             _context = context;
 
             _container = (EntitasDependencyContainer)_context.dependencies;
-
-            Add(new GameEventSystems(context));
-            Add(new GameTimeSystem());
-            Add(new ViewSystem());
         }
 
         public void FixedExecute()

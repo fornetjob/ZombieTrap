@@ -1,7 +1,7 @@
 ﻿using Game.Core.Networking;
 using Game.Core.Networking.Messages;
 
-namespace Assets.Scripts.Features.Client.Networking
+namespace Assets.Scripts.Features.Networking
 {
     public class ClientMessageProcessor:IDependency, IContextInitialize
     {

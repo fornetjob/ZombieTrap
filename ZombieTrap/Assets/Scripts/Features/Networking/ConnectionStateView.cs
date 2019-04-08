@@ -2,7 +2,7 @@
 using TMPro;
 using UnityEngine;
 
-namespace Assets.Scripts.Features.Client.Networking
+namespace Assets.Scripts.Features.Networking
 {
     public class ConnectionStateView : ViewBase, IConnectionStateListener
     {

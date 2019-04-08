@@ -1,5 +1,5 @@
 ﻿using Game.Core.Networking;
-using Assets.Scripts.Features.Client.Networking;
+using Assets.Scripts.Features.Networking;
 using NUnit.Framework;
 
 public class ConcurrentReceiveStackTest

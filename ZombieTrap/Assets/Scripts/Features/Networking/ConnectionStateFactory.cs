@@ -1,6 +1,6 @@
 ﻿using Game.Core.Networking;
 
-namespace Assets.Scripts.Features.Client.Networking
+namespace Assets.Scripts.Features.Networking
 {
     public class ConnectionStateFactory: FactoryBase
     {

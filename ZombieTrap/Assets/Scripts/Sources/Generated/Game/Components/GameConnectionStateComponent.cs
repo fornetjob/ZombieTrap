@@ -9,12 +9,12 @@
 public partial class GameContext {
 
     public GameEntity connectionStateEntity { get { return GetGroup(GameMatcher.ConnectionState).GetSingleEntity(); } }
-    public Assets.Scripts.Features.Client.Networking.ConnectionStateComponent connectionState { get { return connectionStateEntity.connectionState; } }
+    public Assets.Scripts.Features.Networking.ConnectionStateComponent connectionState { get { return connectionStateEntity.connectionState; } }
     public bool hasConnectionState { get { return connectionStateEntity != null; } }
 
     public GameEntity SetConnectionState(Game.Core.Networking.ConnectionState newValue, int newTryCount) {
         if (hasConnectionState) {
-            throw new Entitas.EntitasException("Could not set ConnectionState!\n" + this + " already has an entity with Assets.Scripts.Features.Client.Networking.ConnectionStateComponent!",
+            throw new Entitas.EntitasException("Could not set ConnectionState!\n" + this + " already has an entity with Assets.Scripts.Features.Networking.ConnectionStateComponent!",
                 "You should check if the context already has a connectionStateEntity before setting it or use context.ReplaceConnectionState().");
         }
         var entity = CreateEntity();
@@ -46,12 +46,12 @@ public partial class GameContext {
 //------------------------------------------------------------------------------
 public partial class GameEntity {
 
-    public Assets.Scripts.Features.Client.Networking.ConnectionStateComponent connectionState { get { return (Assets.Scripts.Features.Client.Networking.ConnectionStateComponent)GetComponent(GameComponentsLookup.ConnectionState); } }
+    public Assets.Scripts.Features.Networking.ConnectionStateComponent connectionState { get { return (Assets.Scripts.Features.Networking.ConnectionStateComponent)GetComponent(GameComponentsLookup.ConnectionState); } }
     public bool hasConnectionState { get { return HasComponent(GameComponentsLookup.ConnectionState); } }
 
     public void AddConnectionState(Game.Core.Networking.ConnectionState newValue, int newTryCount) {
         var index = GameComponentsLookup.ConnectionState;
-        var component = (Assets.Scripts.Features.Client.Networking.ConnectionStateComponent)CreateComponent(index, typeof(Assets.Scripts.Features.Client.Networking.ConnectionStateComponent));
+        var component = (Assets.Scripts.Features.Networking.ConnectionStateComponent)CreateComponent(index, typeof(Assets.Scripts.Features.Networking.ConnectionStateComponent));
         component.value = newValue;
         component.tryCount = newTryCount;
         AddComponent(index, component);
@@ -59,7 +59,7 @@ public partial class GameEntity {
 
     public void ReplaceConnectionState(Game.Core.Networking.ConnectionState newValue, int newTryCount) {
         var index = GameComponentsLookup.ConnectionState;
-        var component = (Assets.Scripts.Features.Client.Networking.ConnectionStateComponent)CreateComponent(index, typeof(Assets.Scripts.Features.Client.Networking.ConnectionStateComponent));
+        var component = (Assets.Scripts.Features.Networking.ConnectionStateComponent)CreateComponent(index, typeof(Assets.Scripts.Features.Networking.ConnectionStateComponent));
         component.value = newValue;
         component.tryCount = newTryCount;
         ReplaceComponent(index, component);

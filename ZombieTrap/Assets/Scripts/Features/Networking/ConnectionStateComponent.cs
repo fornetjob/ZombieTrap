@@ -2,7 +2,7 @@
 using Entitas;
 using Entitas.CodeGeneration.Attributes;
 
-namespace Assets.Scripts.Features.Client.Networking
+namespace Assets.Scripts.Features.Networking
 {
     [Unique]
     [Event(EventTarget.Self)]

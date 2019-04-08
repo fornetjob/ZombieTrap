@@ -1,6 +1,4 @@
 ﻿using Assets.Scripts.EntitasExtensions;
-using Assets.Scripts.Features.Client.Move;
-using Assets.Scripts.Features.Client.Networking;
 
 using UnityEngine;
 
@@ -16,6 +14,10 @@ namespace Assets.Scripts.Features.Client
             var context = Contexts.sharedInstance;
 
             _feature = context.feautures;
+
+            _feature.Add(new GameEventSystems(context));
+            _feature.Add(new GameTimeSystem());
+            _feature.Add(new ViewSystem());
 
             _feature.Add(new ClientConnectSystem());
             _feature.Add(new ClientSystem());

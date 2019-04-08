@@ -3,7 +3,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Assets.Scripts.Features.Client.Networking
+namespace Assets.Scripts.Features.Networking
 {
     public class ConcurrentReceiveStack
     {

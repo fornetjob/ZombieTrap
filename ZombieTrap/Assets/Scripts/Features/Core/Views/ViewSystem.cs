@@ -2,46 +2,41 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Assets.Scripts.Features.Core.Views
+public class ViewSystem : IExecuteSystem, IContextInitialize
 {
-    public class ViewSystem:IExecuteSystem, IContextInitialize
+    private IGroup<GameEntity>
+        _views;
+
+    private Dictionary<string, ViewBase>
+        _dict = new Dictionary<string, ViewBase>();
+
+    void IContextInitialize.Initialize(Contexts context)
     {
-        private IGroup<GameEntity>
-            _views;
+        _views = context.game.GetGroup(GameMatcher.View);
 
-        private Dictionary<string, ViewBase>
-            _dict = new Dictionary<string, ViewBase>();
+        var canvas = GameObject.Find("Canvas");
 
-        void IContextInitialize.Initialize(Contexts context)
+        foreach (var current in canvas.GetComponentsInChildren<ViewBase>(true))
         {
-            _views = context.game.GetGroup(GameMatcher.View);
+            _dict.Add(current.gameObject.name, current);
+        }
+    }
 
-            var canvas = GameObject.Find("Canvas");
+    public void Execute()
+    {
+        if (_views.count > 0)
+        {
+            var entities = _views.GetEntities();
 
-            foreach (var current in canvas.GetComponentsInChildren<ViewBase>(true))
+            for (int i = 0; i < entities.Length; i++)
             {
-                _dict.Add(current.gameObject.name, current);
+                var entity = entities[i];
+
+                var view = _dict[entity.view.name];
+                view.AttachEntity(entity.view.attachedEntity);
+
+                entity.RemoveView();
             }
         }
-
-        public void Execute()
-        {
-            if (_views.count > 0)
-            {
-                var entities = _views.GetEntities();
-
-                for (int i = 0; i < entities.Length; i++)
-                {
-                    var entity = entities[i];
-
-                    var view = _dict[entity.view.name];
-                    view.AttachEntity(entity.view.attachedEntity);
-
-                    entity.RemoveView();
-                }
-            }
-        }
-
-       
     }
 }

@@ -45,7 +45,7 @@ public static class GameComponentsLookup {
     };
 
     public static readonly System.Type[] componentTypes = {
-        typeof(Assets.Scripts.Features.Client.Networking.ConnectionStateComponent),
+        typeof(Assets.Scripts.Features.Networking.ConnectionStateComponent),
         typeof(Assets.Scripts.Features.Core.Board.BoardComponent),
         typeof(Assets.Scripts.Features.Core.Bound.BoundComponent),
         typeof(Assets.Scripts.Features.Core.Destroy.DestroyComponent),
