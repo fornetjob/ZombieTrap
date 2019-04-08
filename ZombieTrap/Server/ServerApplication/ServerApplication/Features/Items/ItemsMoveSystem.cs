@@ -1,5 +1,6 @@
 ﻿using Game.Core;
 using ServerApplication.Features.Items;
+using System;
 
 public class ItemsMoveSystem : IFixedExecuteSystem
 {
@@ -26,43 +27,48 @@ public class ItemsMoveSystem : IFixedExecuteSystem
         {
             var room = _roomsPooling.Rooms[roomIndex];
 
-            var zombies = _itemsPooling.Get(room.RoomId);
+            var items = _itemsPooling.Get(room.RoomId);
 
-            for (int zombieIndex = 0; zombieIndex < zombies.Count; zombieIndex++)
+            #region Move
+
+            for (int itemIndex = 0; itemIndex < items.Count; itemIndex++)
             {
-                var zombie = zombies[zombieIndex];
+                var item = items[itemIndex];
 
-                var pos = zombie.Pos;
+                var pos = item.Pos;
 
-                if (zombie.Speed > Vector2Float.kEpsilon)
+                if (item.Speed > Vector2Float.kEpsilon)
                 {
-                    switch (zombie.State)
+                    switch (item.State)
                     {
                         case ItemState.Move:
-                            pos = Vector2Float.MoveTowards(pos, zombie.MoveToPos, time * zombie.Speed);
+                            pos = Vector2Float.MoveTowards(pos, item.MoveToPos, time * item.Speed);
 
-                            if (Vector2Float.Distance(pos, zombie.MoveToPos) <= Vector2Float.kEpsilon)
+                            if (Vector2Float.Distance(pos, item.MoveToPos) <= Vector2Float.kEpsilon)
                             {
-                                pos = zombie.MoveToPos;
+                                pos = item.MoveToPos;
 
-                                EndMove(zombie);
+                                EndMove(item);
                             }
                             break;
                         case ItemState.Wait:
-                            if (zombie.WaitTo < _timeService.GetGameTime())
+                            if (item.WaitTo < _timeService.GetGameTime())
                             {
-                                var roomBound = _roomBoundService.GetRadiusBound(zombie.Radius);
+                                var roomBound = _roomBoundService.GetRadiusBound(item.Radius);
 
                                 var dir = _randomService.RandomDir();
 
-                                var moveToPos = zombie.Pos + dir * roomBound.size.x;
+                                var moveToPos = item.Pos + dir * Math.Max(roomBound.size.y, roomBound.size.x);
 
-                                moveToPos = roomBound.ClosestPoint(moveToPos);
+                                // Обрежем позицию до комнаты
+                                moveToPos = new Vector2Float(
+                                    Math.Min(Math.Max(moveToPos.x, roomBound.min.x), roomBound.max.x), 
+                                    Math.Min(Math.Max(moveToPos.y, roomBound.min.y), roomBound.max.y));
 
-                                dir = (zombie.Pos - moveToPos).normalized;
+                                dir = (item.Pos - moveToPos).normalized;
 
-                                zombie.MoveToPos = moveToPos;
-                                zombie.State = ItemState.Move;
+                                item.MoveToPos = moveToPos;
+                                item.State = ItemState.Move;
 
                                 continue;
                             }
@@ -72,19 +78,19 @@ public class ItemsMoveSystem : IFixedExecuteSystem
 
                 bool isIntersect = false;
 
-                for (int otherZombieIndex = zombieIndex + 1; otherZombieIndex < zombies.Count; otherZombieIndex++)
+                for (int otherItemIndex = itemIndex + 1; otherItemIndex < items.Count; otherItemIndex++)
                 {
-                    var otherZombie = zombies[otherZombieIndex];
+                    var otherItem = items[otherItemIndex];
 
-                    var distBetweenZombies = Vector2Float.Distance(pos, otherZombie.Pos);
+                    var distBetweenItems = Vector2Float.Distance(pos, otherItem.Pos);
 
-                    if (distBetweenZombies < zombie.Radius + otherZombie.Radius)
+                    if (distBetweenItems < item.Radius + otherItem.Radius)
                     {
-                        var distLack = distBetweenZombies - zombie.Radius - otherZombie.Radius;
+                        var distLack = distBetweenItems - item.Radius - otherItem.Radius;
 
-                        otherZombie.Pos = otherZombie.Pos + (pos - otherZombie.Pos).normalized * distLack;
+                        otherItem.Pos = otherItem.Pos + (pos - otherItem.Pos).normalized * distLack;
 
-                        EndMove(otherZombie);
+                        EndMove(otherItem);
 
                         isIntersect = true;
                     }
@@ -92,11 +98,13 @@ public class ItemsMoveSystem : IFixedExecuteSystem
 
                 if (isIntersect)
                 {
-                    EndMove(zombie);
+                    EndMove(item);
                 }
 
-                zombie.Pos = pos;
+                item.Pos = pos;
             }
+
+            #endregion
         }
     }
 

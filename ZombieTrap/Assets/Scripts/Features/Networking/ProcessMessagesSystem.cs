@@ -12,12 +12,20 @@ public class ProcessMessagesSystem : IExecuteSystem, IContextInitialize, ITearDo
 
     private GameTimeService _gameTimeService = null;
     private ClientMessageProcessor _messageProcessor = null;
+    private NetworkSettingsService _networkSettingsService = null;
+
+    #endregion
+
+    #region Factories
+
+    private MessageFactory _messageFactory = null;
 
     #endregion
 
     #region Poolings
 
-    private MessagesPooling _messagePoolings = null;
+    private SenderMessagesPooling _senderMessagesPooling = null;
+    private ListenMessagesPooling _listenMessagePoolings = null;
 
     #endregion
 
@@ -42,11 +50,7 @@ public class ProcessMessagesSystem : IExecuteSystem, IContextInitialize, ITearDo
 
         _connectionTimeEvent = _gameTimeService.CreateTimeEvent(1);
 
-        _listener = new UdpListener(new ListenConfiguration
-        {
-            ListeningPort = 32000,
-            ReceiveInterval = 10
-        });
+        _listener = new UdpListener(_networkSettingsService.GetListenConfiguration());
 
         _listener.OnReceive += OnMessageReceive;
 
@@ -66,7 +70,12 @@ public class ProcessMessagesSystem : IExecuteSystem, IContextInitialize, ITearDo
 
         _connectionTimeEvent.Reset();
 
-        _messagePoolings.Push(msg);
+        _listenMessagePoolings.Enqueue(msg);
+
+        if (msg.Type.IsStrongMessage())
+        {
+            _messageFactory.CreateReplyMessage(msg.Id);
+        }
     }
 
     #endregion
@@ -77,12 +86,16 @@ public class ProcessMessagesSystem : IExecuteSystem, IContextInitialize, ITearDo
             && _stateEntity.connectionState.value == ConnectionState.Active)
         {
             _stateEntity.ReplaceConnectionState(ConnectionState.Lost, 0);
+
+            // Мы потеряли соединение, очистим очередь
+            _listenMessagePoolings.Clear();
+            _senderMessagesPooling.Clear();
         }
         else
         {
             MessageContract msg;
 
-            if (_messagePoolings.TryPopMessage(out msg))
+            if (_listenMessagePoolings.TryDequeueMessage(out msg))
             {
                 _messageProcessor.Process(msg);
             }

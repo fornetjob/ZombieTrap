@@ -20,6 +20,8 @@ public class PlayerFactory : IDependency
             })
         };
 
+        player.Sender.Open();
+
 #if DEBUG
         System.Console.WriteLine("Connected player {0}", playerId);
 #endif

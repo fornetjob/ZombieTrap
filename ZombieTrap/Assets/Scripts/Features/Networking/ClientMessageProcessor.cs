@@ -60,24 +60,21 @@ namespace Assets.Scripts.Features.Networking
 
         private void OnRoomMessage(RoomMessage msg)
         {
-            OnItemsMessage(msg.Items);
         }
 
         private void OnItemsMessage(ItemsMessage msg)
         {
-            for (int i = 0; i < msg.PositionsMessage.Identities.Length; i++)
+            for (int i = 0; i < msg.Identities.Length; i++)
             {
-                var id = msg.PositionsMessage.Identities[i];
+                var id = msg.Identities[i];
 
                 var item = _context.game.GetEntityWithIdentity(id);
 
                 if (item == null)
                 {
-                    item = _itemFactory.Create(id, msg.Types[i], msg.Radiuses[i]);
+                    item = _itemFactory.Create(id, msg.Types[i], msg.Radiuses[i], msg.Positions[i]);
                 }
             }
-
-            OnPositionMessage(msg.PositionsMessage);
         }
 
         private void OnPositionMessage(PositionsMessage msg)

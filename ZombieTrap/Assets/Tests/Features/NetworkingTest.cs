@@ -14,6 +14,8 @@ public class NetworkingTest
 
         var serializerService = context.dependencies.Provide<SerializerService>();
 
+        var senderMesssagePooling = context.dependencies.Provide<SenderMessagesPooling>();
+
         using (var clientSender = new UdpSender(new SendConfiguration
         {
             RemoteHost = "localhost",
@@ -40,12 +42,12 @@ public class NetworkingTest
                 serverListener.Open();
                 clientSender.Open();
 
-                var connectMsg = messageFactory.CreateConnectMessage(Guid.NewGuid());
-
                 while (isConnected == false
                     && tryCount > 0)
                 {
-                    clientSender.Send(connectMsg);
+                    messageFactory.CreateConnectMessage();
+
+                    clientSender.Send(senderMesssagePooling.Dequeue());
 
                     tryCount--;
 

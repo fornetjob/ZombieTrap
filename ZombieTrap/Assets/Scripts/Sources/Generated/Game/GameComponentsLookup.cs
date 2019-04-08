@@ -20,7 +20,7 @@ public static class GameComponentsLookup {
     public const int View = 9;
     public const int Move = 10;
     public const int ConnectionState = 11;
-    public const int Zombie = 12;
+    public const int Item = 12;
     public const int ConnectionStateListener = 13;
     public const int PositionListener = 14;
 
@@ -39,7 +39,7 @@ public static class GameComponentsLookup {
         "View",
         "Move",
         "ConnectionState",
-        "Zombie",
+        "Item",
         "ConnectionStateListener",
         "PositionListener"
     };

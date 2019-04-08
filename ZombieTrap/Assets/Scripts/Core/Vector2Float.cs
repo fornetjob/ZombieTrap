@@ -2,16 +2,20 @@
 
 namespace Game.Core
 {
+    [ProtoBuf.ProtoContract]
     public struct Vector2Float
     {
+        public const float kEpsilon = 1E-05f;
+
         public Vector2Float(float x, float y)
         {
             this.x = x;
             this.y = y;
         }
 
-        public const float kEpsilon = 1E-05f;
+        [ProtoBuf.ProtoMember(1)]
         public float x;
+        [ProtoBuf.ProtoMember(2)]
         public float y;
 
         public Vector2Float normalized

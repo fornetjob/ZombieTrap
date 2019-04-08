@@ -7,5 +7,7 @@ namespace Game.Core.Networking.Messages
     {
         [ProtoBuf.ProtoMember(1)]
         public Guid PlayerId;
+        [ProtoBuf.ProtoMember(2)]
+        public PortInterval Port;
     }
 }

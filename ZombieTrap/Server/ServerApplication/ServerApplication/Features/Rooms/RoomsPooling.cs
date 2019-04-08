@@ -18,7 +18,7 @@ public class RoomsPooling : IDependency
             {
                 var room = Rooms[i];
 
-                if (room.MaxPlayerCount > _playersPooling.GetPlayerCount(room.RoomId))
+                if (room.MaxPlayerCount > _playersPooling.GetRoomPlayers(room.RoomId).Count)
                 {
                     return room;
                 }

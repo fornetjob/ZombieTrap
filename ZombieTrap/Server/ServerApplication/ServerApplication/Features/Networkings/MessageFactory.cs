@@ -1,100 +1,125 @@
-﻿using Assets.Scripts.Core.Networking.Messages;
-
-using Game.Core;
+﻿using Game.Core;
 using Game.Core.Networking;
-
+using Game.Core.Networking.Messages;
 using System;
 
-namespace ServerApplication.Features.Networkings
+public class MessageFactory : IDependency
 {
-    public class MessageFactory:IDependency
+    #region Services
+
+    private RoomBoundService _roomBoundService = null;
+    private SerializerService _serializerService = null;
+
+    #endregion
+
+    #region Poolings
+
+    private ItemsPooling _itemsPooling = null;
+    private PlayersPooling _playersPooling = null;
+    private MessagePooling _messagePooling = null;
+
+    #endregion
+
+    #region Fields
+
+    private ulong
+        _messageId = 0;
+
+    #endregion
+
+    public void CreateMessage(Guid roomId, MessageType type)
     {
-        #region Services
+        byte[] data;
 
-        private RoomBoundService _roomBoundService = null;
-        private SerializerService _serializerService = null;
-
-        #endregion
-
-        #region Poolings
-
-        private ItemsPooling _itemsPooling = null;
-        private PlayersPooling _playersPooling = null;
-        private MessagePooling _messagePooling = null;
-
-        #endregion
-
-        #region Fields
-
-        private ulong 
-            _messageId = 0;
-
-        #endregion
-
-        public MessageContract CreateMessage(Guid playerId, MessageType type)
+        switch (type)
         {
-            byte[] data;
-
-            switch(type)
-            {
-                case MessageType.Room:
-                    data = _serializerService.Serialize(CreateRoomMessage(playerId));
-                    break;
-                case MessageType.Items:
-                    data = _serializerService.Serialize(CreateItemsMessage(playerId));
-                    break;
-                default:
-                    throw new System.NotSupportedException(type.ToString());
-            }
-
-            _messageId++;
-
-            var msg = new MessageContract
-            {
-                Id = _messageId,
-                Type = type,
-                Data = data
-            };
-
-            _messagePooling.AddMessage(playerId, msg);
-
-            return msg;
+            case MessageType.Positions:
+                data = _serializerService.Serialize(CreatePositionsMessage(roomId));
+                break;
+            case MessageType.Items:
+                data = _serializerService.Serialize(CreateItemsMessage(roomId));
+                break;
+            default:
+                throw new NotSupportedException(type.ToString());
         }
 
-        private RoomMessage CreateRoomMessage(Guid playerId)
+        var players = _playersPooling.GetRoomPlayers(roomId);
+
+        for (int i = 0; i < players.Count; i++)
         {
-            return new RoomMessage
-            {
-                Bound = _roomBoundService.GetRoomBound(),
-                Items = CreateItemsMessage(playerId)
-            };
+            var player = players[i];
+
+            AddMessageToPooling(player.PlayerId, type, data);
+        }
+    }
+
+    public void CreateRoomMessage(Guid roomId, Guid playerId)
+    {
+        AddMessageToPooling(playerId, MessageType.Room, _serializerService.Serialize(new RoomMessage
+        {
+            Bound = _roomBoundService.GetRoomBound(),
+        }));
+
+        AddMessageToPooling(playerId, MessageType.Items, _serializerService.Serialize(CreateItemsMessage(roomId)));
+    }
+
+    private PositionsMessage CreatePositionsMessage(Guid roomId)
+    {
+        var items = _itemsPooling.Get(roomId);
+
+        var posMsg = new PositionsMessage
+        {
+            Identities = new ulong[items.Count],
+            Positions = new Vector2Float[items.Count]
+        };
+
+        for (int i = 0; i < items.Count; i++)
+        {
+            var item = items[i];
+
+            posMsg.Identities[i] = item.ItemId;
+            posMsg.Positions[i] = item.Pos;
         }
 
-        private ItemsMessage CreateItemsMessage(Guid playerId)
+        return posMsg;
+    }
+
+    private void AddMessageToPooling(Guid playerId, MessageType type, byte[] data)
+    {
+        _messageId++;
+
+        var msg = new MessageContract
         {
-            var player = _playersPooling.GetPlayer(playerId);
+            Id = _messageId,
+            Type = type,
+            Data = data
+        };
 
-            var items = _itemsPooling.Get(player.RoomId);
+        _messagePooling.AddMessage(playerId, msg);
+    }
 
-            var msg = new ItemsMessage
-            {
-                Ids = new ulong[items.Count],
-                Poses = new Vector2Float[items.Count],
-                Radiuses = new float[items.Count],
-                Types = new ItemType[items.Count]
-            };
+    private ItemsMessage CreateItemsMessage(Guid roomId)
+    {
+        var items = _itemsPooling.Get(roomId);
 
-            for (int i = 0; i < items.Count; i++)
-            {
-                var item = items[i];
+        var msg = new ItemsMessage
+        {
+            Identities = new ulong[items.Count],
+            Positions = new Vector2Float[items.Count],
+            Radiuses = new float[items.Count],
+            Types = new ItemType[items.Count]
+        };
 
-                msg.Ids[i] = item.ItemId;
-                msg.Poses[i] = item.Pos;
-                msg.Radiuses[i] = item.Radius;
-                msg.Types[i] = item.Type;
-            }
+        for (int i = 0; i < items.Count; i++)
+        {
+            var item = items[i];
 
-            return msg;
+            msg.Identities[i] = item.ItemId;
+            msg.Positions[i] = item.Pos;
+            msg.Radiuses[i] = item.Radius;
+            msg.Types[i] = item.Type;
         }
+
+        return msg;
     }
 }

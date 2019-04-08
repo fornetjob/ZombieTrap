@@ -1,13 +1,19 @@
 ﻿using Game.Core;
+using UnityEngine;
 
 public class ItemFactory : FactoryBase
 {
-    public GameEntity Create(ulong id, ItemType type, float radius)
+    private PrefabsPooling _prefabsPooling = null;
+
+    public GameEntity Create(ulong id, ItemType type, float radius, Vector2Float pos)
     {
         var entity = _context.game.CreateEntity();
 
         entity.AddIdentity(id);
-        entity.AddZombie(type, radius);
+        entity.AddItem(type, radius);
+        entity.AddPosition(new Vector3(pos.x, 0, pos.y));
+
+        _prefabsPooling.Create(type.ToString(), entity);
 
         return entity;
     }

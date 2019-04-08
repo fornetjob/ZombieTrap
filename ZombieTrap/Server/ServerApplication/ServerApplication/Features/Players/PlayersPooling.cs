@@ -13,9 +13,9 @@ public class PlayersPooling:IDependency
     private List<Player>
         _players = new List<Player>();
 
-    public int GetPlayerCount(Guid roomId)
+    public List<Player> GetRoomPlayers(Guid roomId)
     {
-        return _roomDict[roomId].Count;
+        return _roomDict[roomId];
     }
 
     public void AddPlayer(Player player)

@@ -4,6 +4,12 @@ using System;
 
 public class ItemFactory : IDependency
 {
+    #region Services
+
+    private SettingsService _settingsService = null;
+    
+    #endregion
+
     #region Poolings
 
     private ItemsPooling _itemsPooling = null;
@@ -20,12 +26,15 @@ public class ItemFactory : IDependency
     {
         _itemId++;
 
+        float speed = _settingsService.GetItemSpeed(type);
+
         var item = new Item
         {
             ItemId = _itemId,
             RoomId = roomId,
             Type = type,
             Radius = radius,
+            Speed = speed,
             Pos = pos,
             State = ItemState.Wait
         };

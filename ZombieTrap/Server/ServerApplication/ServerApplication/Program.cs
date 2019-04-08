@@ -15,6 +15,7 @@ namespace ServerApplication
             features.Add(new RoomSystem());
             features.Add(new ZombieSpawnSystem());
             features.Add(new ItemsMoveSystem());
+            features.Add(new ItemsSendPositionsSystem());
             features.Add(new ListeningSystem());
             features.Add(new SenderSystem());
 

@@ -1,7 +1,6 @@
 ﻿using Game.Core.Networking;
 using Game.Core.Networking.Messages;
 using ServerApplication.Features.Players;
-using ServerApplication.Features.Rooms;
 using System.Net;
 
 namespace ServerApplication.Features.Networkings
@@ -37,6 +36,19 @@ namespace ServerApplication.Features.Networkings
                 case MessageType.Connect:
                     OnConnectMessage(ip, _messageService.ConvertToConnectMessage(msg));
                     break;
+                case MessageType.Reply:
+
+                    var reply = _messageService.ConvertToReplyMessage(msg);
+
+                    var strongQueue = _messagePooling.GetStrongMessageQueue(reply.PlayerId);
+
+                    if (strongQueue.Count > 0
+                        && strongQueue.Peek().Id == msg.Id)
+                    {
+                        strongQueue.Dequeue();
+                    }
+
+                    break;
                 default:
                     throw new System.NotSupportedException(msg.Type.ToString());
             }
@@ -44,6 +56,8 @@ namespace ServerApplication.Features.Networkings
 
         private void OnConnectMessage(IPEndPoint ip, ConnectMessage msg)
         {
+            Player player;
+
             if (_playersPooling.IsExistPlayer(msg.PlayerId) == false)
             {
                 var room = _roomsPooling.GetNotFullRoom();
@@ -53,13 +67,17 @@ namespace ServerApplication.Features.Networkings
                     room = _roomFactory.CreateRoom();
                 }
 
-                _playerFactory.Create(room.RoomId, msg.PlayerId, ip);
+                player = _playerFactory.Create(room.RoomId, msg.PlayerId, new IPEndPoint(ip.Address, msg.Port.port));
+            }
+            else
+            {
+                player = _playersPooling.GetPlayer(msg.PlayerId);
             }
 
             // Очистим очередь сообщений игрока
-            _messagePooling.Clear(msg.PlayerId);
+            _messagePooling.Clear(player.PlayerId);
 
-            _messageFactory.CreateMessage(msg.PlayerId, MessageType.Room);
+            _messageFactory.CreateRoomMessage(player.RoomId, player.PlayerId);
         }
     }
 }

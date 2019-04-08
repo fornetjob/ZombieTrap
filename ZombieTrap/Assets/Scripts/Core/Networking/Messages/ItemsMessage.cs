@@ -6,10 +6,12 @@ namespace Game.Core.Networking.Messages
     public class ItemsMessage
     {
         [ProtoBuf.ProtoMember(1)]
-        public PositionsMessage PositionsMessage;
+        public ulong[] Identities;
         [ProtoBuf.ProtoMember(2)]
-        public ItemType[] Types;
+        public Vector2Float[] Positions;
         [ProtoBuf.ProtoMember(3)]
+        public ItemType[] Types;
+        [ProtoBuf.ProtoMember(4)]
         public float[] Radiuses;
     }
 }

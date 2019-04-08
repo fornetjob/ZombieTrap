@@ -15,6 +15,16 @@ public class MessageService : IService
         return _serializerService.Deserialize<ConnectMessage>(contract.Data);
     }
 
+    public ReplyMessage ConvertToReplyMessage(MessageContract contract)
+    {
+        if (contract.Type != MessageType.Reply)
+        {
+            throw new System.ArgumentOutOfRangeException("type");
+        }
+
+        return _serializerService.Deserialize<ReplyMessage>(contract.Data);
+    }
+
     public RoomMessage ConvertToRoomMessage(MessageContract contract)
     {
         if (contract.Type != MessageType.Room)

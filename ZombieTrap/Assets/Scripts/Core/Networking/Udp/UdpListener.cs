@@ -60,19 +60,6 @@ namespace Game.Core.Networking.Udp
                             {
                                 var message = _serializerService.Defragment(fragment);
 
-                                if (message.Type.IsStrongMessage())
-                                {
-                                    var reply = new MessageContract
-                                    {
-                                        Id = message.Id,
-                                        Type = MessageType.Reply
-                                    };
-
-                                    var replyData = _serializerService.Fragment(reply)[0].Data;
-
-                                    listener.Send(replyData, replyData.Length, ip);
-                                }
-
                                 OnReceive(ip, message);
                             }
                             else
