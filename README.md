@@ -8,9 +8,9 @@
 - Строгая очередь сообщений дожидается, пока клиент перешлёт подтверждение получения сообщения (к примеру, при коннекте к серверу или получении списка объектов в комнате). 
 - Обычная очередь сообщений не дожидается ответа от клиента, к примеру при передаче текущих позиций зомби.
 
-[Исходный код сервера](https://github.com/fornetjob/ZombieTrap/tree/master/ZombieTrap/Server/ServerApplication/ServerApplication)
+[Исходный код сервера](https://github.com/fornetjob/ZombieTrap/tree/master/ZombieTrap/Server/ServerApplication/ServerApplication/Features)
 
-[Исходный код клиента](https://github.com/fornetjob/ZombieTrap/tree/master/ZombieTrap)
+[Исходный код клиента](https://github.com/fornetjob/ZombieTrap/tree/master/ZombieTrap/Assets/Scripts/Features)
 
 ## Описание
 
