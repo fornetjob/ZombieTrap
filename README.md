@@ -24,4 +24,4 @@
 
 ## Требования
 
-(Unity 2018.3.8 или старше)[https://unity3d.com/unity/whats-new/2018.3.8]
+[Unity 2018.3.8 или старше](https://unity3d.com/unity/whats-new/2018.3.8)
