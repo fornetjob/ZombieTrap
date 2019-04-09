@@ -25,3 +25,4 @@
 ## Требования
 
 [Unity 2018.3.8 или старше](https://unity3d.com/unity/whats-new/2018.3.8)
+Для сериализации/десериализации сообщений используется https://github.com/mgravell/protobuf-net
