@@ -22,8 +22,8 @@
 7. Если фаербол наносит урон, игроку пересылается новое количество хелсов повреждённых объектов (система [ProjectileExplosionSystem](https://github.com/fornetjob/ZombieTrap/blob/master/ZombieTrap/Server/ServerApplication/ServerApplication/Features/Projectiles/ProjectileExplosionSystem.cs)).
 8. На клиенте при получении информации о повреждении проигрывается анимация урона по зомби. Если хелсы опустились до нуля - проигрывается анимация уничтожения зомби (в [HealthView](https://github.com/fornetjob/ZombieTrap/blob/master/ZombieTrap/Assets/Scripts/Features/Health/HealthView.cs)).
 
-## Требования
+## Используется
 
-[Unity 2018.3.8 или старше](https://unity3d.com/unity/whats-new/2018.3.8)
-
-Для сериализации/десериализации сообщений используется https://github.com/mgravell/protobuf-net
+[Unity 2018.3.8](https://unity3d.com/unity/whats-new/2018.3.8)
+[Entitas](https://github.com/sschmid/Entitas-CSharp) 
+[Protobuf-net](https://github.com/mgravell/protobuf-net) - Для сериализации/десериализации сообщений
