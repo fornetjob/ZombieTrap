@@ -9,6 +9,7 @@
 - Обычная очередь сообщений не дожидается ответа от клиента, к примеру при передаче текущих позиций зомби.
 
 [Исходный код сервера](https://github.com/fornetjob/ZombieTrap/tree/master/ZombieTrap/Server/ServerApplication/ServerApplication)
+
 [Исходный код клиента](https://github.com/fornetjob/ZombieTrap/tree/master/ZombieTrap)
 
 ## Описание
