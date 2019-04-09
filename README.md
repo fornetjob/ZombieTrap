@@ -21,3 +21,7 @@
 6. Периодически в комнате возникает фаербол, который бьёт по зомби (система [ProjectileSpawnerSystem](https://github.com/fornetjob/ZombieTrap/blob/master/ZombieTrap/Server/ServerApplication/ServerApplication/Features/Projectiles/ProjectileSpawnerSystem.cs)).
 7. Если фаербол наносит урон, игроку пересылается новое количество хелсов повреждённых объектов (система [ProjectileExplosionSystem](https://github.com/fornetjob/ZombieTrap/blob/master/ZombieTrap/Server/ServerApplication/ServerApplication/Features/Projectiles/ProjectileExplosionSystem.cs)).
 8. На клиенте при получении информации о повреждении проигрывается анимация урона по зомби. Если хелсы опустились до нуля - проигрывается анимация уничтожения зомби (в [HealthView](https://github.com/fornetjob/ZombieTrap/blob/master/ZombieTrap/Assets/Scripts/Features/Health/HealthView.cs)).
+
+## Требования
+
+(Unity 2018.3.8 или старше)[https://unity3d.com/unity/whats-new/2018.3.8]
