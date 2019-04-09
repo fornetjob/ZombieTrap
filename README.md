@@ -25,5 +25,7 @@
 ## Используется
 
 [Unity 2018.3.8](https://unity3d.com/unity/whats-new/2018.3.8)
+
 [Entitas](https://github.com/sschmid/Entitas-CSharp) 
+
 [Protobuf-net](https://github.com/mgravell/protobuf-net) - Для сериализации/десериализации сообщений
