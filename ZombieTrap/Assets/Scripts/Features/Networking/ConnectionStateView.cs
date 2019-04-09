@@ -1,6 +1,6 @@
 ﻿using Game.Core.Networking;
-using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Assets.Scripts.Features.Networking
 {
@@ -9,7 +9,7 @@ namespace Assets.Scripts.Features.Networking
         #region Bindings
 
         [SerializeField]
-        private TextMeshProUGUI
+        private Text
             _text = null;
 
         #endregion

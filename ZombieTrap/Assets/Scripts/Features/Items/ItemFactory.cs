@@ -27,7 +27,7 @@ public class ItemFactory : FactoryBase
         var posTo = new Vector3(pos.x, 0.5f, pos.y);
         var posFrom = new Vector3(pos.x + _randomService.Range(-5, +5), 10, pos.y + _randomService.Range(-5, +5));
 
-        const float explosionParticleDelay = 0.45f;
+        const float explosionParticleDelay = 0.6f;
 
         entity.AddIdentity(id);
         entity.AddProjectile(waitTime - _timeService.GetGameTime() - explosionParticleDelay, posFrom, posTo);

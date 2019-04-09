@@ -65,12 +65,13 @@ public class MessageFactory : IDependency
         CreateItemsMessage(roomId, items);
     }
 
-    public void CreateServerSyncMessage(Guid roomId, Guid playerId)
+    public void CreateServerSyncMessage(Guid roomId, Guid playerId, uint roomNumber)
     {
         var msg = new ServerSyncMessage
         {
             Bound = _roomBoundService.GetRoomBound(),
-            ServerTime = _timeService.GetGameTime()
+            ServerTime = _timeService.GetGameTime(),
+            RoomNumber = roomNumber
         };
 
         AddMessageToSinglePlayer(playerId, MessageType.ServerSync, _serializerService.Serialize(msg));

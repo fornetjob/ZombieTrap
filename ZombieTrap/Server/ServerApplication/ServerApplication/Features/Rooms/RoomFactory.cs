@@ -23,10 +23,18 @@ public class RoomFactory : IDependency
 
     #endregion
 
+    #region Fields
+
+    private uint
+        _roomNumber = 0;
+
+    #endregion
+
     public Room CreateRoom()
     {
         var room = new Room
         {
+            Number = ++_roomNumber,
             RoomId = Guid.NewGuid(),
             MaxZombieCount = 20,
             MaxPlayerCount = 2,

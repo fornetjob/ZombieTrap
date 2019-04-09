@@ -22,6 +22,7 @@ public class ProcessMessagesSystem : IExecuteSystem, IContextInitialize, ITearDo
 
     private ItemFactory _itemFactory = null;
     private MessageFactory _messageFactory = null;
+    private RoomFactory _roomFactory = null;
 
     #endregion
 
@@ -156,6 +157,15 @@ public class ProcessMessagesSystem : IExecuteSystem, IContextInitialize, ITearDo
     private void OnRoomMessage(ServerSyncMessage msg)
     {
         _gameTimeService.SyncTime(msg.ServerTime);
+
+        if (_context.game.hasRoom == false)
+        {
+            _roomFactory.Create(msg.RoomNumber);
+        }
+        else
+        {
+            _context.game.ReplaceRoom(msg.RoomNumber);
+        }
     }
 
     private void OnDamageMessage(DamageMessage msg)

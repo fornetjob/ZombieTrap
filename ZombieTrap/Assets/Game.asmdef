@@ -1,7 +1,6 @@
 {
     "name": "Game",
     "references": [
-        "Unity.TextMeshPro",
         "Game.Core"
     ],
     "optionalUnityReferences": [],

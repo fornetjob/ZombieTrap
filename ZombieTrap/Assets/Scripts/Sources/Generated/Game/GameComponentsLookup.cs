@@ -23,13 +23,15 @@ public static class GameComponentsLookup {
     public const int ConnectionState = 12;
     public const int Attached = 13;
     public const int Projectile = 14;
-    public const int Item = 15;
-    public const int ConnectionStateListener = 16;
-    public const int HealthListener = 17;
-    public const int MoveListener = 18;
-    public const int PositionListener = 19;
+    public const int Room = 15;
+    public const int Item = 16;
+    public const int ConnectionStateListener = 17;
+    public const int HealthListener = 18;
+    public const int MoveListener = 19;
+    public const int PositionListener = 20;
+    public const int RoomListener = 21;
 
-    public const int TotalComponents = 20;
+    public const int TotalComponents = 22;
 
     public static readonly string[] componentNames = {
         "Board",
@@ -47,11 +49,13 @@ public static class GameComponentsLookup {
         "ConnectionState",
         "Attached",
         "Projectile",
+        "Room",
         "Item",
         "ConnectionStateListener",
         "HealthListener",
         "MoveListener",
-        "PositionListener"
+        "PositionListener",
+        "RoomListener"
     };
 
     public static readonly System.Type[] componentTypes = {
@@ -70,10 +74,12 @@ public static class GameComponentsLookup {
         typeof(Assets.Scripts.Features.Networking.ConnectionStateComponent),
         typeof(Assets.Scripts.Features.Prefabs.AttachedComponent),
         typeof(Assets.Scripts.Features.Projectiles.ProjectileComponent),
+        typeof(Assets.Scripts.Features.Room.RoomComponent),
         typeof(Assets.Scripts.Features.Zombies.ItemComponent),
         typeof(ConnectionStateListenerComponent),
         typeof(HealthListenerComponent),
         typeof(MoveListenerComponent),
-        typeof(PositionListenerComponent)
+        typeof(PositionListenerComponent),
+        typeof(RoomListenerComponent)
     };
 }

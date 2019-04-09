@@ -1,4 +1,5 @@
 ﻿using Game.Core.Networking.Udp;
+using System.Threading;
 using UnityEngine;
 
 public class NetworkSettingsService : IDependency
@@ -6,21 +7,47 @@ public class NetworkSettingsService : IDependency
     private const string ListenConfigurationKey = "ListenConfiguration";
     private const string SenderConfigurationKey = "SenderConfiguration";
 
+    private Mutex
+        _portMutex;
+
+    private ListenConfiguration
+        _listenConfiguration;
+
     public ListenConfiguration GetListenConfiguration()
     {
-        if (PlayerPrefs.HasKey(ListenConfigurationKey))
+        if (_listenConfiguration == null)
         {
-            return (ListenConfiguration)JsonUtility.FromJson(
-                PlayerPrefs.GetString(ListenConfigurationKey), typeof(ListenConfiguration));
-        }
-        else
-        {
-            return new ListenConfiguration
+            if (PlayerPrefs.HasKey(ListenConfigurationKey))
             {
-                ListeningPort = 32000,
-                ReceiveInterval = 10
-            };
+                _listenConfiguration = (ListenConfiguration)JsonUtility.FromJson(
+                    PlayerPrefs.GetString(ListenConfigurationKey), typeof(ListenConfiguration));
+            }
+            else
+            {
+                _listenConfiguration = new ListenConfiguration
+                {
+                    ListeningPort = 32000,
+                    ReceiveInterval = 10
+                };
+            }
+
+            for (int i = 0; i < 1000; i++)
+            {
+                string mutexName = string.Format("ZombieTrapPort_{0}", _listenConfiguration.ListeningPort + i);
+
+                bool isNew;
+
+                _portMutex = new Mutex(true, mutexName, out isNew);
+
+                if (isNew)
+                {
+                    _listenConfiguration.ListeningPort += i;
+                    break;
+                }
+            }
         }
+
+        return _listenConfiguration;
     }
 
     public SendConfiguration GetSenderConfiguration()

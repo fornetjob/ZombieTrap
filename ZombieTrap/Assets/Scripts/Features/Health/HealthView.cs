@@ -70,11 +70,11 @@ namespace Assets.Scripts.Features.Health
 
         private IEnumerator DeadState(GameEntity entity)
         {
-            yield return new WaitForSeconds(3f);
+            yield return new WaitForSeconds(2f);
 
             _hideParticle.Play();
 
-            yield return new WaitForSeconds(0.8f);
+            yield return new WaitForSeconds(0.5f);
 
             _mesh.enabled = false;
 
