@@ -14,11 +14,6 @@ public class GameTimeService : IService, IContextInitialize
         _gameTimeEntity = context.game.SetGameTime(0);
     }
 
-    public void SyncTime(float serverTime)
-    {
-        _gameTimeEntity.ReplaceGameTime(serverTime);
-    }
-
     public float GetGameTime()
     {
         return _gameTimeEntity.gameTime.value;

@@ -145,7 +145,6 @@ public class ProcessMessagesSystem : IExecuteSystem, IContextInitialize, ITearDo
 
     private void OnRoomMessage(RoomMessage msg)
     {
-        _gameTimeService.SyncTime(msg.ServerTime);
     }
 
     private void OnItemsMessage(ItemsMessage msg)

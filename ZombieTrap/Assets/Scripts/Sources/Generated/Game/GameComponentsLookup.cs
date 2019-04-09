@@ -20,13 +20,14 @@ public static class GameComponentsLookup {
     public const int View = 9;
     public const int Move = 10;
     public const int ConnectionState = 11;
-    public const int Projectile = 12;
-    public const int Item = 13;
-    public const int ConnectionStateListener = 14;
-    public const int MoveListener = 15;
-    public const int PositionListener = 16;
+    public const int Attached = 12;
+    public const int Projectile = 13;
+    public const int Item = 14;
+    public const int ConnectionStateListener = 15;
+    public const int MoveListener = 16;
+    public const int PositionListener = 17;
 
-    public const int TotalComponents = 17;
+    public const int TotalComponents = 18;
 
     public static readonly string[] componentNames = {
         "Board",
@@ -41,6 +42,7 @@ public static class GameComponentsLookup {
         "View",
         "Move",
         "ConnectionState",
+        "Attached",
         "Projectile",
         "Item",
         "ConnectionStateListener",
@@ -61,6 +63,7 @@ public static class GameComponentsLookup {
         typeof(Assets.Scripts.Features.Core.Views.ViewComponent),
         typeof(Assets.Scripts.Features.Move.MoveComponent),
         typeof(Assets.Scripts.Features.Networking.ConnectionStateComponent),
+        typeof(Assets.Scripts.Features.Prefabs.AttachedComponent),
         typeof(Assets.Scripts.Features.Projectiles.ProjectileComponent),
         typeof(Assets.Scripts.Features.Zombies.ItemComponent),
         typeof(ConnectionStateListenerComponent),

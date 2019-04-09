@@ -39,16 +39,18 @@ public class ProjectileExplosionSystem : IFixedExecuteSystem
 
                     if (item.Type.IsDamagable())
                     {
-                        var distBetweenZombies = Vector2Float.Distance(projectile.Pos, item.Pos);
+                        var distTo = Math.Abs(Vector2Float.Distance(projectile.Pos, item.Pos) - item.Radius);
 
-                        if (distBetweenZombies < projectile.Radius + item.Radius)
+                        if (distTo < projectile.Radius)
                         {
                             if (damagedItems == null)
                             {
                                 damagedItems = new List<Item>();
                             }
 
-                            item.Health = Math.Max(0, item.Health - projectile.Health);
+                            var damage = (int)(projectile.Health * (distTo / projectile.Radius));
+
+                            item.Health = Math.Max(0, item.Health - damage);
 
                             damagedItems.Add(item);
                         }

@@ -22,6 +22,7 @@ namespace Assets.Scripts.Features
             _feature.Add(new ServerConnectionSystem());
             _feature.Add(new ProcessMessagesSystem());
             _feature.Add(new MoveSystem());
+            _feature.Add(new DestroySystem());
         }
 
         private void Start()

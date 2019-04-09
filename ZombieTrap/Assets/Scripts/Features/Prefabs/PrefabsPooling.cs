@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Assets.Scripts.Features.Prefabs;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class PrefabsPooling : IDependency
@@ -11,33 +12,41 @@ public class PrefabsPooling : IDependency
 
     #region Fields
 
-    private Queue<GameObject>
-        _destroyed = new Queue<GameObject>();
+    private Queue<ViewComposite>
+        _destroyed = new Queue<ViewComposite>();
 
     #endregion
 
-    public GameObject Create(string path, GameEntity entity)
+    public void Create(string path, GameEntity entity)
     {
-        GameObject item;
+        ViewComposite item;
 
         if (_destroyed.Count > 0)
         {
             item = _destroyed.Dequeue();
 
-            item.gameObject.SetActive(true);
+            item.Root.SetActive(true);
         }
         else
         {
-            item = GameObject.Instantiate(_resourceService.GetPrefab(path));
+            var root = GameObject.Instantiate(_resourceService.GetPrefab(path));
+
+            var views = root.GetComponentsInChildren<ViewBase>(true);
+
+            item = new ViewComposite(root, views); 
         }
 
-        var views = item.GetComponentsInChildren<ViewBase>(true);
+        entity.AddAttached(item);
 
-        for (int i = 0; i < views.Length; i++)
-        {
-            views[i].AttachEntity(entity);
-        }
+        item.AttachEntity(entity);
+    }
 
-        return item;
+    public void Destroy(ViewComposite item, GameEntity entity)
+    {
+        item.DettachEntity(entity);
+
+        item.Root.gameObject.SetActive(false);
+
+        _destroyed.Enqueue(item);
     }
 }

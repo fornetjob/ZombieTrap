@@ -19,11 +19,11 @@ public class ItemFactory : FactoryBase
         }
         else
         {
-            return CreateProjectile(id, type, radius, speed, pos, health, waitTo);
+            return CreateProjectile(id, type, pos, waitTo);
         }
     }
 
-    private GameEntity CreateProjectile(ulong id, ItemType type, float radius, float speed, Vector2Float pos, int health, float waitTo)
+    private GameEntity CreateProjectile(ulong id, ItemType type, Vector2Float pos, float explosionTime)
     {
         var entity = _context.game.CreateEntity();
 
@@ -31,7 +31,7 @@ public class ItemFactory : FactoryBase
         var posFrom = new Vector3(pos.x, 10, pos.y);
 
         entity.AddIdentity(id);
-        entity.AddProjectile(waitTo - _gameTimeService.GetGameTime(), posFrom, posTo);
+        entity.AddProjectile(explosionTime, posFrom, posTo);
 
         _prefabsPooling.Create(type.ToString(), entity);
 

@@ -8,6 +8,11 @@ public class TimeService : IService
 
     #endregion
 
+    public float GetWaitTime(float seconds)
+    {
+        return GetGameTime() + seconds;
+    }
+
     public float GetGameTime()
     {
         return _timePooling.Time;

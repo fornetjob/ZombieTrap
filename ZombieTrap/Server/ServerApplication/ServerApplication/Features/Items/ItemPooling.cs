@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 
 using Game.Core;
-using Game.Core.Networking;
 
 public class ItemsPooling : IDependency
 {

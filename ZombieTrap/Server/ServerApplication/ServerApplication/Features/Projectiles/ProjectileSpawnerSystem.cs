@@ -10,7 +10,7 @@ public class ProjectileSpawnerSystem : IFixedExecuteSystem, IDependencyInitializ
 
     #region Factories
 
-    private ItemFactory _itemFactory = null;
+    private ProjectileFactory _projectileFactory = null;
 
     #endregion
 
@@ -43,7 +43,7 @@ public class ProjectileSpawnerSystem : IFixedExecuteSystem, IDependencyInitializ
             {
                 var room = _roomsPooling.Rooms[roomIndex];
 
-                _itemFactory.CreateProjectile(room.RoomId, ItemType.FireProjectile);
+                _projectileFactory.Create(room.RoomId, ItemType.FireProjectile);
             }
         }
     }
