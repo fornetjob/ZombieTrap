@@ -34,6 +34,12 @@ public class ItemsPooling : IDependency
         _messageFactory.CreateItemMessage(item.RoomId, item);
     }
 
+    public void Remove(Item item)
+    {
+        _items[item.RoomId].Remove(item);
+        _zombiesItems[item.RoomId].Remove(item);
+    }
+
     public List<Item> Get(Guid roomId)
     {
         return _items[roomId];

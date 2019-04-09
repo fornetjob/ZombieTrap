@@ -39,7 +39,7 @@ public class ItemFactory : IDependency
             Pos = pos,
             State = ItemState.Wait,
             Health = health,
-            WaitTo = _timeService.GetWaitTime(1.8f) 
+            WaitTo = _timeService.GetWaitTime(2f) 
         };
 
         _itemsPooling.Add(item);

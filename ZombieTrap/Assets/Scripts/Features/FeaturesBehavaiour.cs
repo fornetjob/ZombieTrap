@@ -19,9 +19,10 @@ namespace Assets.Scripts.Features
             _feature.Add(new GameTimeSystem());
             _feature.Add(new ViewSystem());
 
+            _feature.Add(new MoveSystem());
+
             _feature.Add(new ServerConnectionSystem());
             _feature.Add(new ProcessMessagesSystem());
-            _feature.Add(new MoveSystem());
             _feature.Add(new DestroySystem());
         }
 

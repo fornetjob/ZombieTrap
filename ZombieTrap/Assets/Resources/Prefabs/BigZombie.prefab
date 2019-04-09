@@ -9374,7 +9374,7 @@ ParticleSystem:
   ringBufferLoopRange: {x: 0, y: 1}
   looping: 0
   prewarm: 0
-  playOnAwake: 0
+  playOnAwake: 1
   useUnscaledTime: 0
   autoRandomSeed: 1
   useRigidbodyForVelocity: 1
@@ -13907,7 +13907,7 @@ ParticleSystemRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1377788015151052}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -14002,7 +14002,7 @@ ParticleSystem:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1380607364607472}
   serializedVersion: 6
-  lengthInSec: 3
+  lengthInSec: 2
   simulationSpeed: 1
   stopAction: 0
   cullingMode: 3
@@ -14010,7 +14010,7 @@ ParticleSystem:
   ringBufferLoopRange: {x: 0, y: 1}
   looping: 0
   prewarm: 0
-  playOnAwake: 0
+  playOnAwake: 1
   useUnscaledTime: 0
   autoRandomSeed: 1
   useRigidbodyForVelocity: 1
@@ -18507,7 +18507,7 @@ ParticleSystemRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1380607364607472}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -18648,7 +18648,7 @@ GameObject:
   - component: {fileID: 95038859001963370}
   - component: {fileID: 3796497614851309261}
   - component: {fileID: 6535599536449104240}
-  - component: {fileID: 4771269003357390804}
+  - component: {fileID: 6675546627739958076}
   m_Layer: 11
   m_Name: BigZombie
   m_TagString: Untagged
@@ -18717,7 +18717,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e97f8edbe0db682438f33303a20b717c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &4771269003357390804
+--- !u!114 &6675546627739958076
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -18726,7 +18726,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1504716052086658}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6244c8f91d57c1542ae0442a75975509, type: 3}
+  m_Script: {fileID: 11500000, guid: 6c5fb0e3d78ceb0418c62698c29ebc9f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &1589112283453586
@@ -18933,7 +18933,7 @@ ParticleSystem:
   ringBufferLoopRange: {x: 0, y: 1}
   looping: 0
   prewarm: 0
-  playOnAwake: 0
+  playOnAwake: 1
   useUnscaledTime: 0
   autoRandomSeed: 1
   useRigidbodyForVelocity: 1
@@ -28104,7 +28104,7 @@ ParticleSystem:
   ringBufferLoopRange: {x: 0, y: 1}
   looping: 0
   prewarm: 0
-  playOnAwake: 0
+  playOnAwake: 1
   useUnscaledTime: 0
   autoRandomSeed: 1
   useRigidbodyForVelocity: 1
@@ -32700,7 +32700,7 @@ ParticleSystemRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1899665930851776}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1

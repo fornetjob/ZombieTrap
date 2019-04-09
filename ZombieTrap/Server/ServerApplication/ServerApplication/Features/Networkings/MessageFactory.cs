@@ -65,25 +65,26 @@ public class MessageFactory : IDependency
         CreateItemsMessage(roomId, items);
     }
 
-    public void CreateRoomMessage(Guid roomId, Guid playerId)
+    public void CreateServerSyncMessage(Guid roomId, Guid playerId)
     {
-        var msg = new RoomMessage
+        var msg = new ServerSyncMessage
         {
             Bound = _roomBoundService.GetRoomBound(),
             ServerTime = _timeService.GetGameTime()
         };
 
-        AddMessageToSinglePlayer(playerId, MessageType.Room, _serializerService.Serialize(msg));
+        AddMessageToSinglePlayer(playerId, MessageType.ServerSync, _serializerService.Serialize(msg));
 
         CreateItemsMessage(roomId, _itemsPooling.Get(roomId), playerId);
     }
 
-    public void CreateDamagedMessage(Guid roomId, List<Item> items)
+    public void CreateDamagedMessage(Guid roomId, Vector2Float hitPos, List<Item> items)
     {
         var msg = new DamageMessage
         {
             Identities = new ulong[items.Count],
-            Healths = new int[items.Count]
+            Healths = new int[items.Count],
+            HitPos = hitPos
         };
 
         for (int i = 0; i < items.Count; i++)

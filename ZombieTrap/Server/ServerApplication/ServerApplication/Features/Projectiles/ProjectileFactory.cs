@@ -32,7 +32,7 @@ public class ProjectileFactory:IDependency
         // Возьмём чуть побольше радиус взрыва
         var bound = _roomBoundService.GetRadiusBound(radius * 2);
         var pos = _randomService.RandomPos(bound);
-        var explosionTime = _randomService.Range(2, 6) / 2f;
+        var explosionTime = _timeService.GetWaitTime(_randomService.Range(2, 6) / 2f);
 
         var item = new Item
         {

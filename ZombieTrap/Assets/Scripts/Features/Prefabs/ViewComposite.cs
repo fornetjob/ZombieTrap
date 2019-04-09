@@ -6,14 +6,16 @@ namespace Assets.Scripts.Features.Prefabs
     {
         private ViewBase[] _views;
 
-        public ViewComposite(GameObject root, ViewBase[] views)
+        public ViewComposite(string path, GameObject root, ViewBase[] views)
         {
+            Path = path;
             Root = root;
             _views = views;
         }
 
         #region Properties
 
+        public readonly string Path;
         public readonly GameObject Root;
 
         #endregion

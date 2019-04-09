@@ -77,7 +77,7 @@ namespace ServerApplication.Features.Networkings
 
             player = _playerFactory.Create(room.RoomId, msg.PlayerId, playerEndPoint);
 
-            _messageFactory.CreateRoomMessage(player.RoomId, player.PlayerId);
+            _messageFactory.CreateServerSyncMessage(player.RoomId, player.PlayerId);
         }
 
         #endregion

@@ -4,7 +4,7 @@
     {
         public static bool IsStrongMessage(this MessageType type)
         {
-            return type == MessageType.Room
+            return type == MessageType.ServerSync
                 || type == MessageType.Items;
         }
     }
@@ -12,7 +12,7 @@
     public enum MessageType
     {
         Connect,
-        Room,
+        ServerSync,
         Items,
         Positions,
         Damage,

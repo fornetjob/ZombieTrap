@@ -3,7 +3,7 @@
 namespace Game.Core.Networking.Messages
 {
     [ProtoBuf.ProtoContract]
-    public class RoomMessage
+    public class ServerSyncMessage
     {
         [ProtoBuf.ProtoMember(1)]
         public RectangleFloat Bound;

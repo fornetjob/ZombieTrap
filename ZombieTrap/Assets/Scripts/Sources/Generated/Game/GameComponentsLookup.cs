@@ -18,16 +18,18 @@ public static class GameComponentsLookup {
     public const int Sprite = 7;
     public const int SpriteSize = 8;
     public const int View = 9;
-    public const int Move = 10;
-    public const int ConnectionState = 11;
-    public const int Attached = 12;
-    public const int Projectile = 13;
-    public const int Item = 14;
-    public const int ConnectionStateListener = 15;
-    public const int MoveListener = 16;
-    public const int PositionListener = 17;
+    public const int Health = 10;
+    public const int Move = 11;
+    public const int ConnectionState = 12;
+    public const int Attached = 13;
+    public const int Projectile = 14;
+    public const int Item = 15;
+    public const int ConnectionStateListener = 16;
+    public const int HealthListener = 17;
+    public const int MoveListener = 18;
+    public const int PositionListener = 19;
 
-    public const int TotalComponents = 18;
+    public const int TotalComponents = 20;
 
     public static readonly string[] componentNames = {
         "Board",
@@ -40,12 +42,14 @@ public static class GameComponentsLookup {
         "Sprite",
         "SpriteSize",
         "View",
+        "Health",
         "Move",
         "ConnectionState",
         "Attached",
         "Projectile",
         "Item",
         "ConnectionStateListener",
+        "HealthListener",
         "MoveListener",
         "PositionListener"
     };
@@ -61,12 +65,14 @@ public static class GameComponentsLookup {
         typeof(Assets.Scripts.Features.Core.Sprites.SpriteComponent),
         typeof(Assets.Scripts.Features.Core.Sprites.SpriteSizeComponent),
         typeof(Assets.Scripts.Features.Core.Views.ViewComponent),
+        typeof(Assets.Scripts.Features.Health.HealthComponent),
         typeof(Assets.Scripts.Features.Move.MoveComponent),
         typeof(Assets.Scripts.Features.Networking.ConnectionStateComponent),
         typeof(Assets.Scripts.Features.Prefabs.AttachedComponent),
         typeof(Assets.Scripts.Features.Projectiles.ProjectileComponent),
         typeof(Assets.Scripts.Features.Zombies.ItemComponent),
         typeof(ConnectionStateListenerComponent),
+        typeof(HealthListenerComponent),
         typeof(MoveListenerComponent),
         typeof(PositionListenerComponent)
     };

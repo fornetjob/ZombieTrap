@@ -84,7 +84,16 @@ public class ProcessMessagesSystem : IExecuteSystem, IContextInitialize, ITearDo
     {
         if (_stateEntity.connectionState.value != ConnectionState.Active)
         {
-            _stateEntity.ReplaceConnectionState(ConnectionState.Active, 0);
+            // Не читаем сообщения, пока не было синхронизировано время с сервером
+            if (_stateEntity.connectionState.value == ConnectionState.Connecting
+                && msg.Type != MessageType.ServerSync)
+            {
+                return;
+            }
+            else
+            {
+                _stateEntity.ReplaceConnectionState(ConnectionState.Active, 0);
+            }
         }
 
         _connectionTimeEvent.Reset();
@@ -127,7 +136,7 @@ public class ProcessMessagesSystem : IExecuteSystem, IContextInitialize, ITearDo
     {
         switch (msg.Type)
         {
-            case MessageType.Room:
+            case MessageType.ServerSync:
                 OnRoomMessage(_messageService.ConvertToRoomMessage(msg));
                 break;
             case MessageType.Items:
@@ -137,14 +146,32 @@ public class ProcessMessagesSystem : IExecuteSystem, IContextInitialize, ITearDo
                 OnPositionMessage(_messageService.ConvertToPositionsMessage(msg));
                 break;
             case MessageType.Damage:
+                OnDamageMessage(_messageService.ConvertToDamageMessage(msg));
                 break;
             default:
                 throw new System.NotSupportedException(msg.Type.ToString());
         }
     }
 
-    private void OnRoomMessage(RoomMessage msg)
+    private void OnRoomMessage(ServerSyncMessage msg)
     {
+        _gameTimeService.SyncTime(msg.ServerTime);
+    }
+
+    private void OnDamageMessage(DamageMessage msg)
+    {
+        for (int i = 0; i < msg.Identities.Length; i++)
+        {
+            var id = msg.Identities[i];
+            var health = msg.Healths[i];
+
+            var item = _context.game.GetEntityWithIdentity(id);
+
+            if (item != null)
+            {
+                item.ReplaceHealth(health, new Vector3(msg.HitPos.x, 0, msg.HitPos.y));
+            }
+        }
     }
 
     private void OnItemsMessage(ItemsMessage msg)

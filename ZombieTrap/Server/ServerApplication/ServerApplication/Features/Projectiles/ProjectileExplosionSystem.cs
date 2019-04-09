@@ -51,6 +51,13 @@ public class ProjectileExplosionSystem : IFixedExecuteSystem
                             var damage = (int)(projectile.Health * (distTo / projectile.Radius));
 
                             item.Health = Math.Max(0, item.Health - damage);
+                            item.WaitTo = _timeService.GetWaitTime(3f);
+                            item.State = ItemState.Wait;
+
+                            if (item.Health == 0)
+                            {
+                                _itemsPooling.Remove(item);
+                            }
 
                             damagedItems.Add(item);
                         }
@@ -59,8 +66,12 @@ public class ProjectileExplosionSystem : IFixedExecuteSystem
 
                 if (damagedItems != null)
                 {
-                    _messageFactory.CreateDamagedMessage(projectile.RoomId, damagedItems);
+                    _messageFactory.CreateDamagedMessage(projectile.RoomId, projectile.Pos, damagedItems);
                 }
+
+                _projectilePooling.Remove(projectile);
+
+                projectileIndex--;
             }
         }
     }

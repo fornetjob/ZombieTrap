@@ -12,8 +12,8 @@ public class PrefabsPooling : IDependency
 
     #region Fields
 
-    private Queue<ViewComposite>
-        _destroyed = new Queue<ViewComposite>();
+    private WeakDictionary<string, Queue<ViewComposite>>
+        _destroyed = new WeakDictionary<string, Queue<ViewComposite>>(() => new Queue<ViewComposite>());
 
     #endregion
 
@@ -21,9 +21,9 @@ public class PrefabsPooling : IDependency
     {
         ViewComposite item;
 
-        if (_destroyed.Count > 0)
+        if (_destroyed[path].Count > 0)
         {
-            item = _destroyed.Dequeue();
+            item = _destroyed[path].Dequeue();
 
             item.Root.SetActive(true);
         }
@@ -33,7 +33,7 @@ public class PrefabsPooling : IDependency
 
             var views = root.GetComponentsInChildren<ViewBase>(true);
 
-            item = new ViewComposite(root, views); 
+            item = new ViewComposite(path, root, views); 
         }
 
         entity.AddAttached(item);
@@ -47,6 +47,6 @@ public class PrefabsPooling : IDependency
 
         item.Root.gameObject.SetActive(false);
 
-        _destroyed.Enqueue(item);
+        _destroyed[item.Path].Enqueue(item);
     }
 }

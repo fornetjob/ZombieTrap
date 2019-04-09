@@ -3,11 +3,8 @@ using UnityEngine;
 
 public class ItemFactory : FactoryBase
 {
-    #region Services
-
-    private GameTimeService _gameTimeService = null;
-
-    #endregion
+    private GameTimeService _timeService = null;
+    private RandomService _randomService = null;
 
     private PrefabsPooling _prefabsPooling = null;
 
@@ -23,15 +20,17 @@ public class ItemFactory : FactoryBase
         }
     }
 
-    private GameEntity CreateProjectile(ulong id, ItemType type, Vector2Float pos, float explosionTime)
+    private GameEntity CreateProjectile(ulong id, ItemType type, Vector2Float pos, float waitTime)
     {
         var entity = _context.game.CreateEntity();
 
         var posTo = new Vector3(pos.x, 0.5f, pos.y);
-        var posFrom = new Vector3(pos.x, 10, pos.y);
+        var posFrom = new Vector3(pos.x + _randomService.Range(-5, +5), 10, pos.y + _randomService.Range(-5, +5));
+
+        const float explosionParticleDelay = 0.45f;
 
         entity.AddIdentity(id);
-        entity.AddProjectile(explosionTime, posFrom, posTo);
+        entity.AddProjectile(waitTime - _timeService.GetGameTime() - explosionParticleDelay, posFrom, posTo);
 
         _prefabsPooling.Create(type.ToString(), entity);
 
